@@ -7,6 +7,7 @@ cache:
   - node_modules
 before_deploy:
   - sh scripts/remove-ignore.sh
+  - sh scripts/heroku.sh
 deploy:
   provider: heroku
   skip_cleanup: true
