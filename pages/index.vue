@@ -3,7 +3,7 @@
     <div>
       <logo/>
       <h1 class="title">
-        PictureBoard
+        PhotoBoard
       </h1>
       <h2 class="subtitle">
         Pinterest Clone
