@@ -66,3 +66,12 @@ html {
 .links {
   padding-top: 15px;
 }
+.bg-main {
+  background-color: #3b8070;
+}
+.bg-alt {
+  background-color: #41b883;
+}
+.bg-dark {
+  background-color: #35495e;
+}
