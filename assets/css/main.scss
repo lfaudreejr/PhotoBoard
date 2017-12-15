@@ -1,0 +1,38 @@
+// Sass
+$main-color: #41b883;
+$main-color-dark: #3b8070;
+$alt-color: #526488;
+$alt-color-dark: #35495e;
+
+.bg-main {
+  background-color: $main-color;
+}
+.bg-main-dark {
+  background-color: $main-color-dark;
+}
+.bg-alt {
+  background-color: $alt-color;
+}
+.bg-alt-dark {
+  background-color: $alt-color-dark;
+}
+
+/**
+Navbar
+*/
+a.dropdown-item:hover {
+  background-color: $alt-color !important;
+  color: white;
+}
+a.dropdown-item:active {
+  background-color: $alt-color-dark !important;
+}
+.form-control:focus {
+  border-color: $main-color;
+}
+.nav-link:hover {
+  color: white !important;
+}
+.navbar-brand {
+  color: $main-color !important;
+}
