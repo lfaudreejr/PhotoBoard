@@ -4,6 +4,9 @@
   "description": "Pinterest Clone",
   "author": "Larry Faudree",
   "private": true,
+  "engines": {
+    "node": "^8.9.3"
+  },
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
     "build": "nuxt build",
