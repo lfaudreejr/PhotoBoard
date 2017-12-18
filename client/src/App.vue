@@ -26,8 +26,11 @@ export default {
 
 <style>
 #app {
+  font-family: Roboto Mono, monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  margin-top: 70px;
   min-height: 500px;
+  padding: 25px;
 }
 </style>

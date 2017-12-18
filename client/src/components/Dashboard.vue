@@ -1,7 +1,7 @@
 <template>
-  <md-content>
-    <div class="md-layout md-alignment-center">
-      <div class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100" v-for="item in items" :key="item">
+  <div>
+    <div class="md-layout md-gutter md-alignment-center-center">
+      <div class="md-layout-item md-medium-size-25 md-small-size-50 md-xsmall-size-50" v-for="item in items" :key="item">
         <md-card>
           <md-card-media>
             <md-ripple>
@@ -25,7 +25,7 @@
         </md-card>
       </div>
     </div>
-  </md-content>
+  </div>
 </template>
 
 <script>
@@ -35,7 +35,7 @@ export default {
   data () {
     return {
       menuVisible: false,
-      items: [1, 2, 3, 4, 5] // TODO: remove with real data
+      items: [1, 2, 3, 4, 5, 6, 7] // TODO: remove with real data
     }
   }
 }
@@ -43,11 +43,7 @@ export default {
 
 <style>
 .md-card {
-  justify-content: space-around;
-  width: 320px;
-  margin: 4px;
-  display: inline-block;
-  vertical-align: top;
+  margin: 15px 0;
 }
 
 </style>
