@@ -1,12 +1,26 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <navbar :authenticated='authenticated'></navbar>
+    <router-view :authenticated='authenticated'></router-view>
   </div>
 </template>
 
 <script>
+import Navbar from './components/Navbar'
+import {authenticated, authNotifier} from './authentication/AuthService.js'
 export default {
-  name: 'app'
+  name: 'app',
+  components: {
+    Navbar
+  },
+  data () {
+    authNotifier.on('authChange', authState => {
+      this.authenticated = authState.authenticated
+    })
+    return {
+      authenticated
+    }
+  }
 }
 </script>
 
@@ -14,7 +28,6 @@ export default {
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  min-height: 1080px;
+  min-height: 500px;
 }
 </style>

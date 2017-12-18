@@ -1,87 +1,53 @@
 <template>
-  <div class="page-container">
-    <md-app>
-      <md-app-toolbar class="md-primary" md-elevation="0">
-        <md-button class="md-icon-button" @click="toggleMenu" v-if="!menuVisible">
-          <md-icon>menu</md-icon>
-        </md-button>
-        <span class="md-title">PhotoBoard</span>
-        <div class="md-toolbar-section-end">
-          <md-button @click="logout">Sign Out</md-button>
-        </div>
-      </md-app-toolbar>
+  <md-content>
+    <div class="md-layout md-alignment-center">
+      <div class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100" v-for="item in items" :key="item">
+        <md-card>
+          <md-card-media>
+            <md-ripple>
+              <img    src="https://vuematerial.io/assets/examples/card-image-1.jpg" alt="People">
+            </md-ripple>
+          </md-card-media>
 
-      <md-app-drawer :md-active.sync="menuVisible" md-persistent="mini">
-        <md-toolbar class="md-transparent" md-elevation="0">
-          <span>Navigation</span>
-
-          <div class="md-toolbar-section-end">
-            <md-button class="md-icon-button md-dense" @click="toggleMenu">
-              <md-icon>keyboard_arrow_left</md-icon>
+          <md-card-actions>
+            <md-button class="md-icon-button">
+              <md-icon>favorite</md-icon>
             </md-button>
-          </div>
-        </md-toolbar>
 
-        <md-list>
-          <md-list-item to='/'>
-            <md-icon>move_to_inbox</md-icon>
-            <span class="md-list-item-text">Inbox</span>
-          </md-list-item>
+            <md-button class="md-icon-button">
+              <md-icon>bookmark</md-icon>
+            </md-button>
 
-          <md-list-item to='/'>
-            <md-icon>send</md-icon>
-            <span class="md-list-item-text">Sent Mail</span>
-          </md-list-item>
-
-          <md-list-item to='/'>
-            <md-icon>delete</md-icon>
-            <span class="md-list-item-text">Trash</span>
-          </md-list-item>
-
-          <md-list-item to='/'>
-            <md-icon>error</md-icon>
-            <span class="md-list-item-text">Spam</span>
-          </md-list-item>
-        </md-list>
-      </md-app-drawer>
-
-      <md-app-content>
-        <router-view :authenticated='authenticated'></router-view>
-      </md-app-content>
-    </md-app>
-  </div>
-
+            <md-button class="md-icon-button">
+              <md-icon>share</md-icon>
+            </md-button>
+          </md-card-actions>
+        </md-card>
+      </div>
+    </div>
+  </md-content>
 </template>
 
 <script>
-import {logout, authNotifier, authenticated} from '../authentication/AuthService.js'
 export default {
   name: 'main',
+  props: ['authenticated'],
   data () {
-    authNotifier.on('authChange', authState => {
-      this.authenticated = authState.authenticated
-    })
     return {
       menuVisible: false,
-      authenticated
+      items: [1, 2, 3, 4, 5] // TODO: remove with real data
     }
-  },
-  methods: {
-    toggleMenu () {
-      this.menuVisible = !this.menuVisible
-    },
-    logout
   }
 }
 </script>
 
 <style>
-.md-app {
-  min-height: 1080px;
-  border: 1px solid rgba(#000, .12);
+.md-card {
+  justify-content: space-around;
+  width: 320px;
+  margin: 4px;
+  display: inline-block;
+  vertical-align: top;
 }
-.md-drawer {
-  width: 230px;
-  max-width: calc(100vw - 125px);
-}
+
 </style>
