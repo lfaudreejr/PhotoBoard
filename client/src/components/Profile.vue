@@ -1,12 +1,17 @@
 <template>
   <div>
-    <d1>Profile</d1>
+    <h1>Profile</h1>
   </div>
 </template>
 
 <script>
-export default {
+import * as api from '../api'
 
+export default {
+  mounted () {
+    console.log('mounted')
+    return api.getSecuredAccessPoint()
+  }
 }
 </script>
 

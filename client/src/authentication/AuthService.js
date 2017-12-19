@@ -13,7 +13,7 @@ const getAuth = (() => {
         domain: config.DOMAIN,
         clientID: config.CLIENT_ID,
         redirectUri: config.REDIRECT_URI,
-        audience: `https://${config.DOMAIN}/userinfo`,
+        audience: 'https://photoboard.herokuapp.com/api',
         responseType: 'token id_token',
         scope: 'openid profile'
       })

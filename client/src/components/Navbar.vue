@@ -5,7 +5,7 @@
       <span class="md-xsmall-hide md-title">PhotoBoard</span>
     </div>
 
-    <md-button to='/profile'>Profile</md-button>
+    <md-button to='/profile' v-if="authenticated">Profile</md-button>
 
     <md-button v-if="!authenticated" @click="login()">Sign In</md-button>
     <md-button v-if="authenticated" @click="logout()">Sign Out</md-button>

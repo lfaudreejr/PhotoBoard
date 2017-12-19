@@ -1,7 +1,7 @@
 const jwt = require('express-jwt')
 const jwks = require('jwks-rsa')
 
-module.exports.jwtCheck = jwt({
+const jwtCheck = jwt({
   secret: jwks.expressJwtSecret({
     cache: true,
     rateLimit: true,
@@ -12,3 +12,5 @@ module.exports.jwtCheck = jwt({
   issuer: "https://lfaudreejr.auth0.com/",
   algorithms: ['RS256']
 })
+
+module.exports = jwtCheck
