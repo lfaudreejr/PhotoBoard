@@ -33,7 +33,7 @@ function setSession (authResult) {
 function getProfile (authResult) {
   getAuth().client.userInfo(authResult.accessToken, (err, user) => {
     if (err) console.log(err)
-    localStorage.setItem('profile', JSON.stringify(user.nickname))
+    localStorage.setItem('profile', JSON.stringify(user))
   })
 }
 function isAuthenticated () {
@@ -48,7 +48,7 @@ export const handleLogin = () => getAuth().parseHash((err, authResult) => {
   if (authResult && authResult.accessToken && authResult.idToken) {
     setSession(authResult)
     getProfile(authResult)
-    return router.replace('/dashboard')
+    return router.replace('/')
   } else if (err) {
     router.replace('/')
     console.error(err)

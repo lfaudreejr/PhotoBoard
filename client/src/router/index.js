@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Dashboard from '@/components/Dashboard'
+import Home from '@/components/Home'
 import Callback from '@/components/Callback'
 import Profile from '@/components/Profile'
+import FourOhFour from '@/components/FourOhFour'
 
 Vue.use(Router)
 
@@ -11,8 +12,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Dashboard',
-      component: Dashboard
+      name: 'Home',
+      component: Home
     },
     {
       path: '/callback',
@@ -23,6 +24,11 @@ export default new Router({
       path: '/profile',
       name: 'Profile',
       component: Profile
+    },
+    {
+      path: '**',
+      name: 'FourOhFour',
+      component: FourOhFour
     }
   ]
 })

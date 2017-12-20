@@ -1,5 +1,5 @@
 <template>
-  <md-toolbar class="md-primary main-header" md-elevation="2">
+  <md-toolbar class="md-primary main-header" md-elevation="1">
     <md-button class="md-icon-button" to='/'><md-icon >photo_camera</md-icon></md-button>
     <div style="flex: 1">
       <span class="md-xsmall-hide md-title">PhotoBoard</span>
