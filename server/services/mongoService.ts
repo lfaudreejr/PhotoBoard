@@ -24,7 +24,7 @@ function destroy() {}
 
 function readOne() {}
 
-module.exports = {
+export default {
   create,
   readAll,
   update,

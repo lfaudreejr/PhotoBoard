@@ -1,5 +1,6 @@
 import auth0 from 'auth0-js'
 import EventEmitter from 'eventemitter3'
+import * as api from '../api'
 import config from '../config'
 import router from '../router'
 
@@ -22,6 +23,10 @@ const getAuth = (() => {
   }
 })()
 
+function loginToApi () {
+  api.makeAPostRequest('/api/user', {data: 'none'}).then((data) => console.log(data)).catch((err) => console.error(err.message))
+}
+
 function setSession (authResult) {
   let expiresAt = JSON.stringify(authResult.expiresIn * 1000 + new Date().getTime())
   localStorage.setItem('access_token', authResult.accessToken)
@@ -34,6 +39,9 @@ function getProfile (authResult) {
   getAuth().client.userInfo(authResult.accessToken, (err, user) => {
     if (err) console.log(err)
     localStorage.setItem('profile', JSON.stringify(user))
+    setTimeout(() => {
+      loginToApi()
+    }, 1000)
   })
 }
 function isAuthenticated () {
@@ -42,7 +50,9 @@ function isAuthenticated () {
   let expiresAt = JSON.parse(localStorage.getItem('expires_at'))
   return new Date().getTime() < expiresAt
 }
-
+/**
+ * Exports
+*/
 export const login = () => getAuth().authorize()
 export const handleLogin = () => getAuth().parseHash((err, authResult) => {
   if (authResult && authResult.accessToken && authResult.idToken) {
