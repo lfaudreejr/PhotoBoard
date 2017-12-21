@@ -12,7 +12,8 @@ const getProfile = () => {
  * Exports
  */
 
-export const makeAPostRequest = (route, options) => {
+// Post requests
+export const post = (route, options) => {
   return axios.post(route, options, {
     headers: {
       Authorization: `Bearer ${getToken()}`,
@@ -20,12 +21,27 @@ export const makeAPostRequest = (route, options) => {
     }
   })
 }
-
-/**
- * TODO: remove after testing
-*/
-export const getSecuredAccessPoint = () => {
-  return axios.get('/api/user', {
+// Get requests
+export const get = (route) => {
+  return axios.get(route, {
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
+      Profile: getProfile()
+    }
+  })
+}
+// Put requests
+export const put = (route, options) => {
+  return axios.put(route, options, {
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
+      Profile: getProfile()
+    }
+  })
+}
+// Delete requests
+export const destroy = (route, options) => {
+  return axios.delete(route, {
     headers: {
       Authorization: `Bearer ${getToken()}`,
       Profile: getProfile()

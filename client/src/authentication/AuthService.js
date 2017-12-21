@@ -24,7 +24,7 @@ const getAuth = (() => {
 })()
 
 function loginToApi () {
-  api.makeAPostRequest('/api/user', {data: 'none'}).then((data) => console.log(data)).catch((err) => console.error(err.message))
+  api.post('/api/user', {data: 'none'}).then((data) => console.log(data)).catch((err) => console.error(err.message))
 }
 
 function setSession (authResult) {
