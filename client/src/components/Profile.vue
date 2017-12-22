@@ -11,11 +11,11 @@
     <div md-layout>
       <div class="md-layout-item md-medium-size-33 md-small-size-100">
         <h3>Boards</h3>
-        <md-card md-with-hover>
+        <md-card md-with-hover v-on:click.native="showDialog()" class="board-card">
           <md-ripple>
             <md-card-content>
               <div class="board">
-                <md-button class="md-icon-button" disabled>
+                <md-button class="md-icon-button">
                   <md-icon>add</md-icon>
                 </md-button>
               </div>
@@ -24,6 +24,36 @@
         </md-card>
       </div>
     </div>
+    <!--  MODAL for Creating a Board -->
+    <md-dialog :md-active.sync="showDialogProp">
+      <div>
+        <form class="md-layout-row">
+          <md-card class="md-flex-50 md-flex-small-100">
+            <md-card-header>
+              <div class="md-title">Create Board</div>
+            </md-card-header>
+
+            <md-divider></md-divider>
+
+            <md-card-content>
+              <div class="md-layout-row md-layout-wrap md-gutter">
+                <div class="md-flex md-flex-small-100">
+                  <md-field>
+                    <label for="board-name">Board name</label>
+                    <md-input name="board-name" id="board-name" v-model="modal.boardName"></md-input>
+                  </md-field>
+                </div>
+              </div>
+            </md-card-content>
+
+            <md-divider></md-divider>
+
+            <md-button @click="showDialog(), modal.boardName=''">Cancel</md-button>
+            <md-button>Create</md-button>
+          </md-card>
+        </form>
+      </div>
+    </md-dialog>
   </div>
 </template>
 
@@ -33,7 +63,12 @@ import * as api from '../api'
 export default {
   name: 'profile',
   data () {
-    return {}
+    return {
+      showDialogProp: false,
+      modal: {
+        boardName: ''
+      }
+    }
   },
   computed: {
     username () {
@@ -41,6 +76,11 @@ export default {
     },
     picture () {
       return JSON.parse(localStorage.getItem('profile')).picture
+    }
+  },
+  methods: {
+    showDialog () {
+      this.showDialogProp = !this.showDialogProp
     }
   },
   mounted () {
@@ -52,13 +92,14 @@ export default {
 
 <style lang="scss" scoped>
 .profile {
-  padding-left: 2em;
-  padding-right: 2em;
+  padding-left: 5%;
+  padding-right: 5%;
   margin: 0 auto;
 }
-.md-card {
+.board-card {
   border-radius: 5%;
-  height: 265px;
+  height: 250px;
+  width: 250px;
 }
 .board:hover {
   -moz-transform: scale(1.05);
@@ -73,8 +114,8 @@ export default {
 }
 .md-icon-button {
   position: relative;
-  top: 40%;
-  left: 40%;
+  top: 85px;
+  left: 85px;
   background-color: pink;
   color: white;
 }

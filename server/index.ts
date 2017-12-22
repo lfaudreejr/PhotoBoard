@@ -17,11 +17,7 @@ require('debug')('photoboard:server')
  * Instantiate the Express app
 */
 const app: express.Application = express();
-/**
- * View engine
- */
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+
 /**
  * Middleware setup
  */
