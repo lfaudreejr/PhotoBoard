@@ -1,10 +1,10 @@
 import axios from 'axios'
 
-const getToken = () => {
+export const getToken = () => {
   return localStorage.getItem('access_token')
 }
 
-const getProfile = () => {
+export const getProfile = () => {
   return JSON.parse(localStorage.getItem('profile'))
 }
 
@@ -13,8 +13,8 @@ const getProfile = () => {
  */
 
 // Post requests
-export const post = (route, options) => {
-  return axios.post(route, options, {
+export const post = (route, body) => {
+  return axios.post(route, body, {
     headers: {
       Authorization: `Bearer ${getToken()}`,
       Profile: getProfile()
@@ -31,8 +31,8 @@ export const get = (route) => {
   })
 }
 // Put requests
-export const put = (route, options) => {
-  return axios.put(route, options, {
+export const put = (route, body) => {
+  return axios.put(route, body, {
     headers: {
       Authorization: `Bearer ${getToken()}`,
       Profile: getProfile()
@@ -40,7 +40,7 @@ export const put = (route, options) => {
   })
 }
 // Delete requests
-export const destroy = (route, options) => {
+export const destroy = (route) => {
   return axios.delete(route, {
     headers: {
       Authorization: `Bearer ${getToken()}`,

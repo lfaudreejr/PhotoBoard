@@ -85,7 +85,7 @@ export default {
   },
   mounted () {
     console.log('mounted')
-    return api.get('/api/user').then((data) => console.log(data)).catch((err) => console.error(err))
+    return api.get('/api/user/profile').then((data) => console.log(data)).catch((err) => console.error(err))
   }
 }
 </script>
