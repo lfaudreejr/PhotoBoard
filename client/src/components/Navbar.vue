@@ -5,7 +5,7 @@
       <span class="md-xsmall-hide md-title">PhotoBoard</span>
     </div>
 
-    <md-button to='/profile' v-if="authenticated">Profile</md-button>
+    <md-button @click="gotoProfile()" v-if="authenticated">Profile</md-button>
 
     <md-button v-if="!authenticated" @click="login()">Sign In</md-button>
     <md-button v-if="authenticated" @click="logout()">Sign Out</md-button>
@@ -13,17 +13,22 @@
 </template>
 
 <script>
+import { getProfile } from '../api'
 import {login, logout} from '../authentication/AuthService.js'
 
 export default {
   name: 'navbar',
   props: ['authenticated'],
   data () {
-    return {}
+    return {
+    }
   },
   methods: {
     login,
-    logout
+    logout,
+    gotoProfile () {
+      this.$router.push({name: 'Profile', params: { id: getProfile().name }})
+    }
   }
 }
 </script>

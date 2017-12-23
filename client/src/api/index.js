@@ -8,6 +8,10 @@ export const getProfile = () => {
   return JSON.parse(localStorage.getItem('profile'))
 }
 
+export const getId = () => {
+  return JSON.parse(localStorage.getItem('id'))
+}
+
 /**
  * Exports
  */
@@ -17,7 +21,7 @@ export const post = (route, body) => {
   return axios.post(route, body, {
     headers: {
       Authorization: `Bearer ${getToken()}`,
-      Profile: getProfile()
+      Profile: getId()
     }
   })
 }
@@ -26,7 +30,7 @@ export const get = (route) => {
   return axios.get(route, {
     headers: {
       Authorization: `Bearer ${getToken()}`,
-      Profile: getProfile()
+      Profile: getId()
     }
   })
 }
@@ -35,7 +39,7 @@ export const put = (route, body) => {
   return axios.put(route, body, {
     headers: {
       Authorization: `Bearer ${getToken()}`,
-      Profile: getProfile()
+      Profile: getId()
     }
   })
 }
@@ -44,7 +48,7 @@ export const destroy = (route) => {
   return axios.delete(route, {
     headers: {
       Authorization: `Bearer ${getToken()}`,
-      Profile: getProfile()
+      Profile: getId()
     }
   })
 }

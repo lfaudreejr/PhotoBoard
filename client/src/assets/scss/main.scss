@@ -7,3 +7,33 @@
   ));
 
 @import "~vue-material/dist/theme/all"; // Apply the theme
+
+.profile {
+  padding-left: 5%;
+  padding-right: 5%;
+  margin: 0 auto;
+}
+.board-card {
+  border-radius: 5%;
+  height: 250px;
+  width: 250px;
+  margin: 0 auto;
+}
+.board:hover {
+  -moz-transform: scale(1.05);
+  -webkit-transform: scale(1.05);
+  transform: scale(1.05);
+  cursor: pointer;
+}
+.board {
+  height: 235px;
+  // width: 100%;
+  border-radius: 5%
+}
+.board-button {
+  position: relative;
+  top: 85px;
+  left: 85px;
+  background-color: pink;
+  color: white;
+}

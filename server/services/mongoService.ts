@@ -39,10 +39,10 @@ function create(obj: object, collectionName: string) {
   })
 }
 
-function readAll(obj, collectionName) {
+function readAll(obj, collectionName, params = {}) {
   return getMongoConnection().then((db) => {
     const collection = db.collection(collectionName)
-    return collection.find(obj).toArray((err, docs) => {
+    return collection.find(obj, params).toArray((err, docs) => {
       if (err) return err
       else return docs
     })
@@ -54,7 +54,7 @@ function readAll(obj, collectionName) {
 function update(obj, collectionName, config) {
   return getMongoConnection().then((db) => {
     const collection = db.collection(collectionName)
-    return collection.findOneAndUpdate(obj, config).then((doc) => {
+    return collection.findOneAndUpdate(obj, config, { returnOriginal: false }).then((doc) => {
       if (doc) return doc
       else return null
     }).catch((err) => {
@@ -79,10 +79,10 @@ function destroy(obj, collectionName) {
   })
 }
 
-function readOne(obj, collectionName) {
+function readOne(obj, collectionName, options = {}) {
   return getMongoConnection().then((db) => {
     const collection = db.collection(collectionName)
-    return collection.findOne(obj).then((doc) => {
+    return collection.findOne(obj, options).then((doc) => {
       if (doc) return doc
       else return null
     }).catch((err) => {

@@ -38,6 +38,7 @@ function setSession (authResult) {
 function getProfile (authResult) {
   getAuth().client.userInfo(authResult.accessToken, (err, user) => {
     if (err) console.log(err)
+    localStorage.setItem('id', JSON.stringify(user.sub))
     localStorage.setItem('profile', JSON.stringify(user))
     setTimeout(() => {
       loginToApi()
@@ -70,6 +71,7 @@ export const logout = () => {
   localStorage.removeItem('id_token')
   localStorage.removeItem('expires_at')
   localStorage.removeItem('profile')
+  localStorage.removeItem('id')
   authNotifier.emit('authChange', false)
   router.replace('/')
 }
