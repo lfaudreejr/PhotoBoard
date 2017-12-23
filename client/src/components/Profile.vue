@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="md-layout md-gutter md-alignment-top-center">
-      <div class="md-layout-item md-medium-size-15 md-small-size-100">
+      <div class="md-layout-item md-medium-size-30 md-small-size-100">
         <h3>Add new board</h3>
           <md-card md-with-hover v-on:click.native="showDialog()" class="board-card">
             <md-ripple>
@@ -23,9 +23,9 @@
             </md-ripple>
           </md-card>
       </div>
-      <div v-if="profile.boards" class="md-layout-item md-medium-size-15  md-small-size-100" v-for="board in profile.boards" :key="board.name">
-        <h3>{{board.name}}</h3>
-        <md-card md-with-hover v-on:click.native="gotoBoard(board.name)" class="board-card">
+      <div v-if="boards" class="md-layout-item md-medium-size-30  md-small-size-100" v-for="board in boards" :key="board.title">
+        <h3>{{board.title}}</h3>
+        <md-card md-with-hover v-on:click.native="gotoBoard(board.title)" class="board-card">
           <md-ripple>
             <md-card-content>
               <div class="board">
@@ -38,36 +38,22 @@
     </div>
 
     <!--  MODAL for Creating a Board -->
-    <md-dialog :md-active.sync="showDialogProp">
+    <md-dialog :md-active.sync="showDialogProp" class="dialog">
       <div>
-        <form class="md-layout-row">
-          <md-card class="md-flex-50 md-flex-small-100">
-            <md-card-header>
-              <div class="md-title">Create Board</div>
-            </md-card-header>
+        <md-dialog-title>Create Board</md-dialog-title>
 
-            <md-divider></md-divider>
+        <md-field md-clearable>
+          <label for="board-name">Board name</label>
+          <md-input name="board-name" id="board-name" v-model="modal.boardName"></md-input>
+        </md-field>
 
-            <md-card-content>
-              <div class="md-layout-row md-layout-wrap md-gutter">
-                <div class="md-flex md-flex-small-100">
-                  <md-field>
-                    <label for="board-name">Board name</label>
-                    <md-input name="board-name" id="board-name" v-model="modal.boardName"></md-input>
-                  </md-field>
-                </div>
-              </div>
-            </md-card-content>
-
-            <md-divider></md-divider>
-
-            <md-button @click="showDialog(), modal.boardName=''">Cancel</md-button>
-            <md-button @click="createBoard()">Create</md-button>
-          </md-card>
-        </form>
+        <md-divider></md-divider>
+        <md-dialog-actions>
+          <md-button @click="showDialog(),modal.boardName=''">Cancel</md-button>
+          <md-button @click="createBoard()">Create</md-button>
+        </md-dialog-actions>
       </div>
     </md-dialog>
-    {{profile}}
   </div>
 </template>
 
@@ -82,9 +68,7 @@ export default {
       modal: {
         boardName: ''
       },
-      profile: {
-        boards: null
-      }
+      boards: null
     }
   },
   computed: {
@@ -100,7 +84,7 @@ export default {
       this.showDialogProp = !this.showDialogProp
     },
     createBoard () {
-      api.post('/api/boards', {name: this.modal.boardName, user: api.getProfile()}).then((data) => {
+      api.post('/api/boards', {title: this.modal.boardName, owner: api.getId()}).then((data) => {
         this.$router.push(this.modal.boardName)
       }).catch((err) => {
         console.error(err)
@@ -113,9 +97,10 @@ export default {
   },
   mounted () {
     console.log('mounted')
-    return api.get('/api/user/profile')
+    api.get('/api/user/profile')
     .then((data) => {
-      this.profile = data.data
+      console.log(data)
+      this.boards = data.data
     })
     .catch((err) => console.error(err))
   }
@@ -129,12 +114,8 @@ export default {
 }
 .md-display-1 {
   margin-left: 1rem;
-  color: black;
 }
-.blank-board {
-  background-color: pink;
-  height: 95%;
-  width: 100%;
-  border-radius: 5%;
+.dialog {
+  padding: 15px;
 }
 </style>

@@ -24,7 +24,7 @@ const getAuth = (() => {
 })()
 
 function loginToApi () {
-  return api.post('/api/user/profile', api.getProfile()).then((data) => console.log(data)).catch((err) => console.error(err.message))
+  return api.post('/api/user/profile', {_id: api.getId()}).then((data) => console.log(data)).catch((err) => console.error(err.message))
 }
 
 function setSession (authResult) {

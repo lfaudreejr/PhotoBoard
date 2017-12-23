@@ -1,9 +1,11 @@
 @import "~vue-material/dist/theme/engine"; // Import the theme engine
 
+@import "./variables";
+
 @include md-register-theme("default", (
-  primary: md-get-palette-color(white, A200), // The primary color of your application
-  accent: md-get-palette-color(pink, 500), // The accent or secondary color
-  theme: light
+  primary: $primary-color, // The primary color of your application
+  accent: $accent-color, // The accent or secondary color
+  theme: dark
   ));
 
 @import "~vue-material/dist/theme/all"; // Apply the theme
@@ -34,6 +36,12 @@
   position: relative;
   top: 85px;
   left: 85px;
-  background-color: pink;
+  background-color: $accent-color;
   color: white;
+}
+.blank-board {
+  background-color: $accent-color;
+  height: 95%;
+  width: 100%;
+  border-radius: 5%;
 }

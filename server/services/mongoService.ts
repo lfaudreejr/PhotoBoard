@@ -28,9 +28,8 @@ function getMongoConnection(): Promise<mongodb.Db> {
 function create(obj: object, collectionName: string) {
   return getMongoConnection().then((db) => {
     const collection = db.collection(collectionName)
-    return collection.insertOne(obj).then((doc) => {
-      if (doc) return doc
-      else return null
+    return collection.insertOne(obj).then((data) => {
+      return data
     }).catch((err) => {
       throw new Error(err)
     })
@@ -42,9 +41,11 @@ function create(obj: object, collectionName: string) {
 function readAll(obj, collectionName, params = {}) {
   return getMongoConnection().then((db) => {
     const collection = db.collection(collectionName)
-    return collection.find(obj, params).toArray((err, docs) => {
-      if (err) return err
-      else return docs
+    return new Promise((resolve, reject) => {
+      collection.find(obj, params).toArray((err, docs) => {
+        if (err) return reject(err)
+        return resolve(docs)
+      })
     })
   }).catch((err) => {
     throw new Error(err)

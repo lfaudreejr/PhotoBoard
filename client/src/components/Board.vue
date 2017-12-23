@@ -10,7 +10,7 @@
     <div class="md-layout">
       <div class="md-layout-item md-medium-size-33 md-small-size-100">
         <span class="md-subheading">Add pin</span>
-        <md-card md-with-hover class="board-card">
+        <md-card md-with-hover class="board-card" v-on:click.native="showDialog()">
           <md-ripple>
             <md-card-content>
               <div class="board">
@@ -32,6 +32,28 @@
         </div>
       </div>
     </div>
+
+        <!--  MODAL for Creating a Pin -->
+    <md-dialog :md-active.sync="showDialogProp" class="dialog">
+      <div>
+        <md-dialog-title>Add Pin</md-dialog-title>
+
+        <md-field md-clearable>
+          <label for="pin-uri">Enter Url</label>
+          <md-input name="pin-uri" v-model="modal.url"/>
+        </md-field>
+        <md-field>
+          <label for="pin-description">Enter a description</label>
+          <md-textarea name="pin-description" v-model="modal.description"></md-textarea>
+        </md-field>
+
+        <md-divider></md-divider>
+        <md-dialog-actions>
+          <md-button @click="showDialog(),modal.boardName=''">Cancel</md-button>
+          <md-button @click="addPinToBoard()">Create</md-button>
+        </md-dialog-actions>
+      </div>
+    </md-dialog>
   </div>
 </template>
 
@@ -42,15 +64,26 @@ export default {
   name: 'board',
   data () {
     return {
+      showDialogProp: false,
       title: this.$route.params.board,
-      board: null
+      board: null,
+      modal: {
+        url: null,
+        description: null
+      }
     }
+  },
+  methods: {
+    showDialog () {
+      this.showDialogProp = !this.showDialogProp
+    },
+    addPinToBoard () {}
   },
   mounted () {
     api.get(`/api/boards/${this.$route.params.board}`)
     .then((data) => {
-      console.log(data.data)
-      this.board = data.data[0]
+      console.log(data)
+      this.board = data.data
     })
     .catch((err) => console.error(err))
   }
@@ -58,5 +91,7 @@ export default {
 </script>
 
 <style scoped>
-
+.dialog {
+  padding: 15px;
+}
 </style>
