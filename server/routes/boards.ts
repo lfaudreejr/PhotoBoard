@@ -17,7 +17,6 @@ boardRouter.get('/:name', (req: Request, res: Response) => {
   mongo.readOne({ _id: req.headers.profile },
   'users')
   .then((data) => {
-    console.log(data)
     const pin = data.boards.filter((board) => {
       return board.name == req.params.name
     })
