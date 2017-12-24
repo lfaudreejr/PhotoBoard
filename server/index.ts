@@ -8,7 +8,7 @@ import * as compression from 'compression'
 /**
  * Api Route handlers
  */
-import apiRouter from './routes/'
+import apiRouter from './router/'
 /** 
  * Debug logging
 */

@@ -55,12 +55,7 @@ function readAll(obj, collectionName, params = {}) {
 function update(obj, collectionName, config) {
   return getMongoConnection().then((db) => {
     const collection = db.collection(collectionName)
-    return collection.findOneAndUpdate(obj, config, { returnOriginal: false }).then((doc) => {
-      if (doc) return doc
-      else return null
-    }).catch((err) => {
-      throw new Error(err)
-    })
+    return collection.findOneAndUpdate(obj, config, { returnOriginal: false })
   }).catch((err) => {
     throw new Error(err)
   })

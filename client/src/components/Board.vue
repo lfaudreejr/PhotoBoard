@@ -1,15 +1,14 @@
 <template>
   <div class="profile">
 
-    <div class="md-layout md-gutter md-alignment-left-center">
+    <div class="md-layout md-gutter md-alignment-top-center">
       <div class="md-layout-item md-size-70">
         <p class="md-display-1">{{title}}</p>
       </div>
     </div>
 
-    <div class="md-layout">
-      <div class="md-layout-item md-medium-size-33 md-small-size-100">
-        <span class="md-subheading">Add pin</span>
+    <div class="md-layout md-gutter md-alignment-top-center">
+      <div class="md-layout-item md-medium-size-30 md-small-size-100">
         <md-card md-with-hover class="board-card" v-on:click.native="showDialog()">
           <md-ripple>
             <md-card-content>
@@ -21,15 +20,23 @@
             </md-card-content>
           </md-ripple>
         </md-card>
+        <p class="md-subheading text-center">Add pin</p>
       </div>
-    </div>
 
-    <div v-if="board">
-      {{board}}
-      <div class="md-layout md-gutter md-alignment-center-center md-primary">
-        <div class="md-layout-item" v-for="pin in board.pins" :key="pin">
-          {{pin}}
-        </div>
+      <!-- <div v-if="board"> -->
+        <div v-if="board.pins" class="md-layout-item md-medium-size-30  md-small-size-100" v-for="pin in board.pins" :key="pin._id">
+          <md-card md-with-hover v-on:click.native="gotoPin(pin._id)"  class="board-card">
+            <md-ripple>
+              <md-card-content>
+                <div class="board">
+                  <div class="blank-board">
+                    <img :src='pin.url'/>
+                  </div>
+                </div>
+              </md-card-content>
+            </md-ripple>
+          </md-card>
+        <!-- </div> -->
       </div>
     </div>
 
@@ -66,7 +73,9 @@ export default {
     return {
       showDialogProp: false,
       title: this.$route.params.board,
-      board: null,
+      board: {
+        pins: null
+      },
       modal: {
         url: null,
         description: null
@@ -77,12 +86,24 @@ export default {
     showDialog () {
       this.showDialogProp = !this.showDialogProp
     },
-    addPinToBoard () {}
+    addPinToBoard () {
+      api.post('/api/pins/add', {
+        pin: {
+          url: this.modal.url,
+          description: this.modal.description
+        },
+        board: {
+          _id: this.board._id
+        }
+      })
+      .then((data) => console.log(data))
+      .catch((err) => console.error(err))
+    },
+    gotoPin () {}
   },
   mounted () {
     api.get(`/api/boards/${this.$route.params.board}`)
     .then((data) => {
-      console.log(data)
       this.board = data.data
     })
     .catch((err) => console.error(err))
