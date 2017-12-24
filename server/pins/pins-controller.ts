@@ -1,6 +1,6 @@
 import { Response, Request } from 'express'
 
-import { savePin } from './pin-funcs'
+import { savePin, getPins } from './pin-funcs'
 import { addPinToBoard } from '../boards/board-funcs'
 
 export function createPin (req: Request, res: Response) {
@@ -10,5 +10,11 @@ export function createPin (req: Request, res: Response) {
     .then((data) => res.json(data))
     .catch((err) => res.status(500).json(err))
   })
+  .catch((err) => res.status(500).json(err.message))
+}
+
+export function getAllPins (req: Request, res: Response) {
+  getPins()
+  .then((data) => res.json(data))
   .catch((err) => res.status(500).json(err.message))
 }

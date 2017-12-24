@@ -91,7 +91,6 @@ export default {
       })
     },
     gotoBoard (boardName) {
-      console.log(boardName)
       this.$router.push({name: 'Board', params: { board: boardName }})
     }
   },
@@ -99,7 +98,6 @@ export default {
     console.log('mounted')
     api.get('/api/user/profile')
     .then((data) => {
-      console.log(data)
       this.boards = data.data
     })
     .catch((err) => console.error(err))

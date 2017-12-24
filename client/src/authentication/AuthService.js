@@ -55,15 +55,14 @@ function isAuthenticated () {
  * Exports
 */
 export const login = () => getAuth().authorize()
-export const handleLogin = () => getAuth().parseHash((err, authResult) => {
+export const handleLogin = () => getAuth().parseHash(async (err, authResult) => {
   if (authResult && authResult.accessToken && authResult.idToken) {
-    setSession(authResult)
-    getProfile(authResult)
+    await setSession(authResult)
+    await getProfile(authResult)
     return router.replace('/')
   } else if (err) {
-    router.replace('/')
+    setTimeout(() => router.replace('/'), 1000)
     console.error(err)
-    alert(`Error: ${err.error}. Check the console for further details.`)
   }
 })
 export const logout = () => {

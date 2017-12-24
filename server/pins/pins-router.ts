@@ -18,7 +18,7 @@ pinsRouter.post('/add', jwtCheck, pins.createPin)
 /**
  * Get all pins
  */
-// pinsRouter.get('/all', (req: Request, res: Response) => {})
+pinsRouter.get('/all', jwtCheck, pins.getAllPins)
 
 /**
  * Update a pin

@@ -24,7 +24,7 @@
       </div>
 
       <!-- <div v-if="board"> -->
-        <div v-if="board.pins" class="md-layout-item md-medium-size-30  md-small-size-100" v-for="pin in board.pins" :key="pin._id">
+        <div v-if="boardPins" class="md-layout-item md-medium-size-30  md-small-size-100" v-for="pin in boardPins" :key="pin._id">
           <md-card md-with-hover v-on:click.native="gotoPin(pin._id)"  class="board-card">
             <md-ripple>
               <md-card-content>
@@ -82,11 +82,17 @@ export default {
       }
     }
   },
+  computed: {
+    boardPins () {
+      return this.board.pins
+    }
+  },
   methods: {
     showDialog () {
       this.showDialogProp = !this.showDialogProp
     },
     addPinToBoard () {
+      this.showDialog()
       api.post('/api/pins/add', {
         pin: {
           url: this.modal.url,
@@ -96,17 +102,22 @@ export default {
           _id: this.board._id
         }
       })
-      .then((data) => console.log(data))
+      .then((data) => {
+        this.getPins()
+      })
       .catch((err) => console.error(err))
     },
-    gotoPin () {}
+    gotoPin () {},
+    getPins () {
+      api.get(`/api/boards/${this.$route.params.board}`)
+      .then((data) => {
+        this.board = data.data
+      })
+      .catch((err) => console.error(err))
+    }
   },
   mounted () {
-    api.get(`/api/boards/${this.$route.params.board}`)
-    .then((data) => {
-      this.board = data.data
-    })
-    .catch((err) => console.error(err))
+    this.getPins()
   }
 }
 </script>
