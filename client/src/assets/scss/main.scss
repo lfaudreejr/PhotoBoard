@@ -13,13 +13,10 @@
 .profile {
   padding-left: 5%;
   padding-right: 5%;
-  margin: 0 auto;
 }
 .board-card {
-  border-radius: 5%;
-  height: 250px;
-  width: 250px;
-  margin: 0 auto;
+  height: 100%;
+  width: 100%
 }
 .board:hover {
   -moz-transform: scale(1.05);
@@ -28,27 +25,41 @@
   cursor: pointer;
 }
 .board {
-  height: 235px;
-  border-radius: 5%;
+  width: 100%;
+  height: auto;
 }
 .board-button {
   position: relative;
-  top: 85px;
-  left: 85px;
   background-color: $accent-color;
   color: white;
 }
-.blank-board {
-  background-color: $accent-color;
-  height: 95%;
-  width: 100%;
+.round-edges {
   border-radius: 5%;
-}
-.blank-board > img {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
 }
 .text-center {
   text-align: center;
+}
+.tile {
+  width: 30%;
+  margin: 1%;
+}
+.home-tile {
+  width: 30%;
+  margin: 1%;
+}
+.inner-tile {
+  width: 30%;
+  margin: 1%;
+}
+
+@media (max-width: 560px) {
+  .home-tile {
+    width: 100%;
+  }
+  .tile {
+    width: 100%;
+  }
+  .board-card {
+    width: 100%;
+  }
 }

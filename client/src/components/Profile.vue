@@ -8,33 +8,41 @@
         <img class="user-picture" :src="picture">
       </div>
     </div>
-    <div class="md-layout md-gutter md-alignment-top-center">
-      <div class="md-layout-item md-medium-size-30 md-small-size-100">
-        <h3>Add new board</h3>
+
+    <div v-masonry transition-duration='0.3s' item-selector='.tile'>
+
+      <div v-masonry-tile md-with-hover class="tile">
           <md-card md-with-hover v-on:click.native="showDialog()" class="board-card">
+            <md-card-header>
+              <span class="md-subhead">Add new board</span>
+            </md-card-header>
             <md-ripple>
               <md-card-content>
-                <div class="board">
-                  <md-button class="md-icon-button board-button">
-                    <md-icon>add</md-icon>
-                  </md-button>
-                </div>
+                <md-button class="md-icon-button board-button">
+                  <md-icon>add</md-icon>
+                </md-button>
               </md-card-content>
             </md-ripple>
           </md-card>
       </div>
-      <div v-if="boards" class="md-layout-item md-medium-size-30  md-small-size-100" v-for="board in boards" :key="board.title">
-        <h3>{{board.title}}</h3>
-        <md-card md-with-hover v-on:click.native="gotoBoard(board.title)" class="board-card">
+
+      <div v-if="userBoards" v-masonry-tile md-with-hover class="tile" v-for="board in userBoards" :key="board.title">
+        <md-card md-with-hover v-on:click.native="gotoBoard(board.title)" class="board">
           <md-ripple>
+            <md-card-header>
+              <span class="md-subhead">{{board.title}}</span>
+            </md-card-header>
             <md-card-content>
-              <div class="board">
-                <div class="blank-board"></div>
+              <div v-masonry item-selector='.inner-tile'>
+                <div v-masonry-tile class="inner-tile" v-for="pin in board.pins" :key="pin._id">
+                  <img :src="pin.url"/>
+                </div>
               </div>
             </md-card-content>
           </md-ripple>
         </md-card>
       </div>
+
     </div>
 
     <!--  MODAL for Creating a Board -->
@@ -77,6 +85,9 @@ export default {
     },
     picture () {
       return JSON.parse(localStorage.getItem('profile')).picture
+    },
+    userBoards () {
+      return this.boards
     }
   },
   methods: {
@@ -92,13 +103,32 @@ export default {
     },
     gotoBoard (boardName) {
       this.$router.push({name: 'Board', params: { board: boardName }})
+    },
+    getBoards () {
+      return api.get('/api/user/profile')
+    },
+    getPins () {
+      if (this.boards) {
+        let newBoardsArray = []
+        this.boards.forEach(board => {
+          newBoardsArray.push(api.get(`/api/boards/${board.title}`))
+        })
+        Promise.all(newBoardsArray)
+        .then((data) => {
+          let newBoards = data.map((newData) => {
+            return newData.data
+          })
+          this.boards = newBoards
+        })
+        .catch((err) => console.error(err))
+      }
     }
   },
   mounted () {
-    console.log('mounted')
-    api.get('/api/user/profile')
+    this.getBoards()
     .then((data) => {
       this.boards = data.data
+      this.getPins()
     })
     .catch((err) => console.error(err))
   }

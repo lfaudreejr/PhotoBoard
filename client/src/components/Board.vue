@@ -7,38 +7,35 @@
       </div>
     </div>
 
-    <div class="md-layout md-gutter md-alignment-top-center">
-      <div class="md-layout-item md-medium-size-30 md-small-size-100">
+    <div v-masonry transition-duration='0.3s' item-selector='.tile'>
+
+      <div v-masonry-tile class="tile">
         <md-card md-with-hover class="board-card" v-on:click.native="showDialog()">
           <md-ripple>
+            <md-card-header>
+              <span class="md-subhead">Add new pin</span>
+            </md-card-header>
             <md-card-content>
-              <div class="board">
-                <md-button class="md-icon-button board-button">
-                  <md-icon>add</md-icon>
-                </md-button>
-              </div>
+              <md-button class="md-icon-button board-button">
+                <md-icon>add</md-icon>
+              </md-button>
             </md-card-content>
           </md-ripple>
         </md-card>
-        <p class="md-subheading text-center">Add pin</p>
       </div>
 
-      <!-- <div v-if="board"> -->
-        <div v-if="boardPins" class="md-layout-item md-medium-size-30  md-small-size-100" v-for="pin in boardPins" :key="pin._id">
-          <md-card md-with-hover v-on:click.native="gotoPin(pin._id)"  class="board-card">
-            <md-ripple>
-              <md-card-content>
-                <div class="board">
-                  <div class="blank-board">
-                    <img :src='pin.url'/>
-                  </div>
-                </div>
-              </md-card-content>
-            </md-ripple>
-          </md-card>
-        <!-- </div> -->
+      <div v-masonry-tile class="tile" v-for="pin in boardPins" :key="pin._id">
+        <md-card md-with-hover v-on:click.native="gotoPin(pin._id)"  >
+          <md-ripple>
+            <md-card-media>
+              <img :src='pin.url'/>
+            </md-card-media>
+          </md-ripple>
+        </md-card>
       </div>
+
     </div>
+    <!-- </div> -->
 
         <!--  MODAL for Creating a Pin -->
     <md-dialog :md-active.sync="showDialogProp" class="dialog">

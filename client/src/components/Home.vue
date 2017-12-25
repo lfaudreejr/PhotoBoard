@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="md-layout md-gutter md-alignment-top-center">
-      <div class="md-layout-item md-medium-size-25 md-small-size-50 md-xsmall-size-50" v-if="pins" v-for="pin in pins" :key="pin._id">
-        <md-card>
+    <div v-masonry transition-duration='0.3s' item-selector='.home-tile' v-if="pins">
+      <div v-masonry-tile class="home-tile" v-for="pin in pins" :key="pin._id">
+        <md-card md-with-hover>
           <md-card-media>
             <md-ripple>
               <img :src="pin.url" alt="pin.description">
@@ -23,8 +23,9 @@
             </md-button>
           </md-card-actions>
         </md-card>
-      </div>
     </div>
+  </div>
+
   </div>
 </template>
 
@@ -41,19 +42,24 @@ export default {
       pins: null
     }
   },
+  methods: {
+    loadPins () {
+      api.get('/api/pins/all')
+      .then((data) => {
+        this.pins = data.data
+      })
+      .catch((err) => console.error(err))
+    }
+  },
   mounted: function () {
-    api.get('/api/pins/all')
-    .then((data) => {
-      this.pins = data.data
-    })
-    .catch((err) => console.error(err))
+    this.loadPins()
+    this.$redrawVueMasonry()
   }
 }
 </script>
 
 <style>
 .md-card {
-  margin: 15px 0;
+  margin: 5px 0;
 }
-
 </style>
