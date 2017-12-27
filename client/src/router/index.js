@@ -6,6 +6,7 @@ import Dashboard from '@/components/Dashboard'
 import Profile from '@/components/Profile'
 import Board from '@/components/Board'
 import FourOhFour from '@/components/FourOhFour'
+import Pin from '@/components/Pin'
 
 Vue.use(Router)
 
@@ -16,6 +17,11 @@ export default new Router({
       path: '/',
       name: 'Home',
       component: Home
+    },
+    {
+      path: '/pins/:id',
+      name: 'Pin',
+      component: Pin
     },
     {
       path: '/callback',

@@ -25,12 +25,22 @@
       </div>
 
       <div v-masonry-tile class="tile" v-for="pin in boardPins" :key="pin._id">
-        <md-card md-with-hover v-on:click.native="gotoPin(pin._id)"  >
-          <md-ripple>
+        <md-card md-with-hover  >
+          <md-card-media-cover md-text-scrim>
             <md-card-media>
-              <img :src='pin.url'/>
+              <img :src='pin.url' :alt="pin.description"/>
             </md-card-media>
-          </md-ripple>
+            <md-card-area>
+              <md-card-actions>
+                <md-button class="md-icon-button" @click="deletePinFromBoard()">
+                  <md-icon>delete</md-icon>
+                </md-button>
+                <md-button class="md-icon-button" @click.native="gotoPin(pin)">
+                  <md-icon>pageview</md-icon>
+                </md-button>
+              </md-card-actions>
+            </md-card-area>
+          </md-card-media-cover>
         </md-card>
       </div>
 
@@ -104,14 +114,17 @@ export default {
       })
       .catch((err) => console.error(err))
     },
-    gotoPin () {},
+    gotoPin (pin) {
+      this.$router.replace(`/pins/${pin._id}`)
+    }, // TODO:
     getPins () {
       api.get(`/api/boards/${this.$route.params.board}`)
       .then((data) => {
         this.board = data.data
       })
       .catch((err) => console.error(err))
-    }
+    },
+    deletePinFromBoard () {} // TODO:
   },
   mounted () {
     this.getPins()

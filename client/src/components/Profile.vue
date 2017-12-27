@@ -27,8 +27,8 @@
       </div>
 
       <div v-if="userBoards" v-masonry-tile md-with-hover class="tile" v-for="board in userBoards" :key="board.title">
-        <md-card md-with-hover v-on:click.native="gotoBoard(board.title)" class="board">
-          <md-ripple>
+        <md-card md-with-hover class="board">
+          <md-ripple v-on:click.native="gotoBoard(board.title)">
             <md-card-header>
               <span class="md-subhead">{{board.title}}</span>
             </md-card-header>
@@ -40,13 +40,14 @@
               </div>
             </md-card-content>
           </md-ripple>
+          <md-button @click="openBoardEditModal()">edit</md-button>
         </md-card>
       </div>
 
     </div>
 
     <!--  MODAL for Creating a Board -->
-    <md-dialog :md-active.sync="showDialogProp" class="dialog">
+    <md-dialog :md-active.sync="showCreateBoardDialogProp" class="dialog">
       <div>
         <md-dialog-title>Create Board</md-dialog-title>
 
@@ -57,7 +58,7 @@
 
         <md-divider></md-divider>
         <md-dialog-actions>
-          <md-button @click="showDialog(),modal.boardName=''">Cancel</md-button>
+          <md-button @click="showCreateBoardDialog(),modal.boardName=''">Cancel</md-button>
           <md-button @click="createBoard()">Create</md-button>
         </md-dialog-actions>
       </div>
@@ -72,7 +73,7 @@ export default {
   name: 'profile',
   data () {
     return {
-      showDialogProp: false,
+      showCreateBoardDialogProp: false,
       modal: {
         boardName: ''
       },
@@ -91,9 +92,10 @@ export default {
     }
   },
   methods: {
-    showDialog () {
-      this.showDialogProp = !this.showDialogProp
+    showCreateBoardDialog () {
+      this.showCreateBoardDialogProp = !this.showCreateBoardDialogProp
     },
+    openBoardEditModal () {}, // TODO:
     createBoard () {
       api.post('/api/boards', {title: this.modal.boardName, owner: api.getId()}).then((data) => {
         this.$router.push(this.modal.boardName)
