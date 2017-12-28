@@ -10,7 +10,7 @@
     <div v-masonry transition-duration='0.3s' item-selector='.tile'>
 
       <div v-masonry-tile class="tile">
-        <md-card md-with-hover class="board-card" v-on:click.native="showDialog()">
+        <md-card md-with-hover class="board-card" v-on:click.native="showDialog(true)">
           <md-ripple>
             <md-card-header>
               <span class="md-subhead">Add new pin</span>
@@ -32,7 +32,7 @@
             </md-card-media>
             <md-card-area>
               <md-card-actions>
-                <md-button class="md-icon-button" @click="deletePinFromBoard()">
+                <md-button class="md-icon-button" @click="deletePinFromBoard(pin._id)">
                   <md-icon>delete</md-icon>
                 </md-button>
                 <md-button class="md-icon-button" @click.native="gotoPin(pin)">
@@ -63,7 +63,7 @@
 
         <md-divider></md-divider>
         <md-dialog-actions>
-          <md-button @click="showDialog(),modal.boardName=''">Cancel</md-button>
+          <md-button @click="showDialog(false),modal.boardName=''">Cancel</md-button>
           <md-button @click="addPinToBoard()">Create</md-button>
         </md-dialog-actions>
       </div>
@@ -95,11 +95,11 @@ export default {
     }
   },
   methods: {
-    showDialog () {
-      this.showDialogProp = !this.showDialogProp
+    showDialog (method) {
+      this.showDialogProp = method
     },
     addPinToBoard () {
-      this.showDialog()
+      this.showDialog(false)
       api.post('/api/pins/add', {
         pin: {
           url: this.modal.url,
@@ -110,6 +110,8 @@ export default {
         }
       })
       .then((data) => {
+        this.modal.url = null
+        this.modal.description = null
         this.getPins()
       })
       .catch((err) => console.error(err))
@@ -124,10 +126,20 @@ export default {
       })
       .catch((err) => console.error(err))
     },
-    deletePinFromBoard () {} // TODO:
+    deletePinFromBoard (_id) {
+      api.destroy(`/api/pins/${_id}`)
+      .then((data) => {
+        console.log(data)
+        this.getPins()
+      })
+      .catch((err) => console.error(err))
+    } // TODO:
   },
   mounted () {
     this.getPins()
+  },
+  updated () {
+    this.$redrawVueMasonry()
   }
 }
 </script>

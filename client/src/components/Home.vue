@@ -54,6 +54,8 @@ export default {
   },
   mounted: function () {
     this.loadPins()
+  },
+  updated () {
     this.$redrawVueMasonry()
   }
 }

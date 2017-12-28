@@ -28,7 +28,7 @@ pinsRouter.get('/all', pins.getAllPins)
 /**
  * Delete a pin
  */
-// pinsRouter.delete('/all', (req: Request, res: Response) => {})
+pinsRouter.delete('/:id', pins.deleteAPin)
 
 
 export default pinsRouter

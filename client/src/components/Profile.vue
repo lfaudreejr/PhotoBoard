@@ -12,7 +12,7 @@
     <div v-masonry transition-duration='0.3s' item-selector='.tile'>
 
       <div v-masonry-tile md-with-hover class="tile">
-          <md-card md-with-hover v-on:click.native="showDialog()" class="board-card">
+          <md-card md-with-hover v-on:click.native="showCreateBoardDialog(true)" class="board-card">
             <md-card-header>
               <span class="md-subhead">Add new board</span>
             </md-card-header>
@@ -58,7 +58,7 @@
 
         <md-divider></md-divider>
         <md-dialog-actions>
-          <md-button @click="showCreateBoardDialog(),modal.boardName=''">Cancel</md-button>
+          <md-button @click="showCreateBoardDialog(false),modal.boardName=''">Cancel</md-button>
           <md-button @click="createBoard()">Create</md-button>
         </md-dialog-actions>
       </div>
@@ -92,8 +92,8 @@ export default {
     }
   },
   methods: {
-    showCreateBoardDialog () {
-      this.showCreateBoardDialogProp = !this.showCreateBoardDialogProp
+    showCreateBoardDialog (method) {
+      this.showCreateBoardDialogProp = method
     },
     openBoardEditModal () {}, // TODO:
     createBoard () {
