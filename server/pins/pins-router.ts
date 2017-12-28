@@ -11,14 +11,14 @@ const pinsRouter: Router = Router()
 pinsRouter.post('/add', jwtCheck, pins.createPin)
 
 /**
- * Get pin by id
- */
-// pinsRouter.get('/:id', (req: Request, res: Response) => {})
-
-/**
  * Get all pins
  */
 pinsRouter.get('/all', pins.getAllPins)
+
+/**
+ * Get pin by id
+ */
+pinsRouter.get('/:id', pins.getPin)
 
 /**
  * Update a pin

@@ -13,6 +13,10 @@ export function getPins () {
   return mongo.readAll({}, 'pins', {})
 }
 
+export function getAPin (id: string) {
+  return mongo.readOne({ _id: new ObjectID(id) }, 'pins')
+}
+
 export function deletePinFromPins (id: string): Promise<FindAndModifyWriteOpResultObject> {
   return mongo.destroy({ _id: new ObjectID(id) }, 'pins')
 }

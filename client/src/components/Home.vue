@@ -2,10 +2,10 @@
   <div>
     <div v-masonry transition-duration='0.3s' item-selector='.home-tile' v-if="pins">
       <div v-masonry-tile class="home-tile" v-for="pin in pins" :key="pin._id">
-        <md-card md-with-hover>
-          <md-card-media-cover md-text-scrim>
+        <md-card>
+          <!-- <md-card-media-cover md-text-scrim> -->
             <md-card-media>
-              <img :src="pin.url" alt="pin.description">
+              <img :src="pin.url" :alt="pin.description">
             </md-card-media>
 
             <md-card-area>
@@ -18,7 +18,7 @@
                 </md-button>
               </md-card-actions>
             </md-card-area>
-          </md-card-media-cover>
+          <!-- </md-card-media-cover> -->
         </md-card>
     </div>
   </div>
@@ -35,7 +35,7 @@ export default {
   data () {
     return {
       menuVisible: false,
-      pins: null
+      pins: {}
     }
   },
   methods: {
@@ -48,11 +48,10 @@ export default {
     },
     savePin () {}, // TODO:
     gotoPin (pin) {
-      console.log(pin)
-      this.$router.push(`/pins/${pin._id}`)
-    } // TODO:
+      this.$router.replace(`/pins/${pin._id}`)
+    }
   },
-  mounted: function () {
+  mounted () {
     this.loadPins()
   },
   updated () {

@@ -25,8 +25,8 @@
       </div>
 
       <div v-masonry-tile class="tile" v-for="pin in boardPins" :key="pin._id">
-        <md-card md-with-hover  >
-          <md-card-media-cover md-text-scrim>
+        <md-card>
+          <!-- <md-card-media-cover md-text-scrim> -->
             <md-card-media>
               <img :src='pin.url' :alt="pin.description"/>
             </md-card-media>
@@ -40,7 +40,7 @@
                 </md-button>
               </md-card-actions>
             </md-card-area>
-          </md-card-media-cover>
+          <!-- </md-card-media-cover> -->
         </md-card>
       </div>
 
@@ -118,7 +118,7 @@ export default {
     },
     gotoPin (pin) {
       this.$router.replace(`/pins/${pin._id}`)
-    }, // TODO:
+    },
     getPins () {
       api.get(`/api/boards/${this.$route.params.board}`)
       .then((data) => {
@@ -129,11 +129,10 @@ export default {
     deletePinFromBoard (_id) {
       api.destroy(`/api/pins/${_id}`)
       .then((data) => {
-        console.log(data)
         this.getPins()
       })
       .catch((err) => console.error(err))
-    } // TODO:
+    }
   },
   mounted () {
     this.getPins()
