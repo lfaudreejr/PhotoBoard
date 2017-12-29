@@ -103,7 +103,9 @@ export default {
       api.post('/api/pins/add', {
         pin: {
           url: this.modal.url,
-          description: this.modal.description
+          description: this.modal.description,
+          uploaded_by: api.getId(),
+          saved_by: api.getId()
         },
         board: {
           _id: this.board._id

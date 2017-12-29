@@ -4,7 +4,7 @@ import { savePin, getPins, getAPin, deletePinFromPins, deletePinFromUserBoard } 
 import { addPinToBoard } from '../boards/board-funcs'
 
 export function createPin (req: Request, res: Response) {
-  savePin({ url: req.body.pin.url, description: req.body.pin.description })
+  savePin({ url: req.body.pin.url, description: req.body.pin.description, uploaded_by: req.body.pin.uploaded_by, saved_by: req.body.pin.saved_by })
   .then((data) => {
     addPinToBoard(data.ops[0]._id, req.body.board._id)
     .then((data) => res.json(data))
