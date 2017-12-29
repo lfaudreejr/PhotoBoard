@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import * as api from '../api'
+import * as user from '../core/user-funcs.js'
 
 export default {
   name: 'board',
@@ -100,17 +100,16 @@ export default {
     },
     addPinToBoard () {
       this.showDialog(false)
-      api.post('/api/pins/add', {
-        pin: {
-          url: this.modal.url,
-          description: this.modal.description,
-          uploaded_by: api.getId(),
-          saved_by: api.getId()
-        },
-        board: {
-          _id: this.board._id
-        }
-      })
+      const pin = {
+        url: this.modal.url,
+        description: this.modal.description,
+        uploaded_by: user.currentUser(),
+        saved_by: user.currentUser()
+      }
+      const board = {
+        _id: this.board._id
+      }
+      user.addPinToUserBoard(pin, board)
       .then((data) => {
         this.modal.url = null
         this.modal.description = null
@@ -122,14 +121,14 @@ export default {
       this.$router.replace(`/pins/${pin._id}`)
     },
     getPins () {
-      api.get(`/api/boards/${this.$route.params.board}`)
+      user.getUserPinsForBoard(this.$route.params.board)
       .then((data) => {
         this.board = data.data
       })
       .catch((err) => console.error(err))
     },
     deletePinFromBoard (_id) {
-      api.destroy(`/api/pins/${_id}`)
+      user.deleteAPinFromABoard(_id)
       .then((data) => {
         this.getPins()
       })

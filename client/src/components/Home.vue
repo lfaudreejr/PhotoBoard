@@ -9,7 +9,7 @@
             </md-card-media>
 
             <md-card-area>
-              <md-card-actions>
+              <md-card-actions v-if="authenticated">
                 <md-button class="md-icon-button" @click="savePin(pin)">
                   <md-icon>bookmark</md-icon>
                 </md-button>

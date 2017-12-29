@@ -19,7 +19,7 @@
             </md-button>
           </md-card-actions>
           <!-- Show if not the current pin owner -->
-          <md-card-actions v-if="currentUser !== pin.saved_by">
+          <md-card-actions v-if="authenticated && currentUser !== pin.saved_by">
             <md-button class="md-icon-button" @click="showSavePinModal(true)">
               <md-icon>bookmark</md-icon>
             </md-button>
@@ -47,10 +47,11 @@
 </template>
 
 <script>
-import * as api from '../api'
+import * as user from '../core/user-funcs.js'
 
 export default {
   name: 'pin',
+  props: ['authenticated'],
   data () {
     return {
       pin: null,
@@ -60,7 +61,7 @@ export default {
   },
   methods: {
     deletePinFromBoard (_id) {
-      api.destroy(`/api/pins/${_id}`)
+      user.deleteAPinFromABoard(_id)
       .then((data) => {
         this.$router.replace('/')
       })
@@ -77,11 +78,11 @@ export default {
   },
   computed: {
     currentUser () {
-      return api.getId()
+      return user.currentUser()
     }
   },
   mounted () {
-    api.get(`/api/pins/${this.$route.params.id}`)
+    user.getAPinById(this.$route.params.id)
     .then((data) => {
       this.pin = data.data
     })

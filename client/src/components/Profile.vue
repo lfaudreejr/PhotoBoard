@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import * as api from '../api'
+import * as user from '../core/user-funcs.js'
 
 export default {
   name: 'profile',
@@ -97,7 +97,8 @@ export default {
     },
     openBoardEditModal () {}, // TODO:
     createBoard () {
-      api.post('/api/boards', {title: this.modal.boardName, owner: api.getId()}).then((data) => {
+      user.createABoard({title: this.modal.boardName, owner: user.currentUser()})
+      .then((data) => {
         this.$router.push(this.modal.boardName)
       }).catch((err) => {
         console.error(err)
@@ -107,22 +108,13 @@ export default {
       this.$router.push({name: 'Board', params: { board: boardName }})
     },
     getBoards () {
-      return api.get('/api/user/profile')
+      return user.getUserBoards()
     },
     getPins () {
       if (this.boards) {
-        let newBoardsArray = []
-        this.boards.forEach(board => {
-          newBoardsArray.push(api.get(`/api/boards/${board.title}`))
+        user.getUserPins().then((data) => {
+          this.boards = data
         })
-        Promise.all(newBoardsArray)
-        .then((data) => {
-          let newBoards = data.map((newData) => {
-            return newData.data
-          })
-          this.boards = newBoards
-        })
-        .catch((err) => console.error(err))
       }
     }
   },
