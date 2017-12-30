@@ -5,14 +5,13 @@ node_js:
 cache:
   directories:
   - node_modules
-deploy:
-  provider: heroku
-  skip_cleanup: true
-  api_key:
-    secure: Rn2/APlJwkdyouuEQbLDtFpSWgjCRTIq/cA993G2kQEZ9uzi7r2Gn+Erb8oel7kpcE8aJHGbB46ukSqSDBITEu/UydSfRGCXMQM07TQgFVFO0hX8EKCrf1R2FB/Qh823TwICVEmrGiiFpCX7wZTD9/PqI82b3p25l4ZKbH++z/SqI/rX7s0Iobeh6FUFoAVu7ryMixnlr+7B2Klf1SR2zEi5KXtVpyl+Mxk+ESJXAcypvD2m1oxXXAfi/Df/dZuxyORQufZS4HHJW09dGlLB5ML70/dU0whWk8f4umjbt7CGfmYs7HH9RGdLasPYrvvFXE2+4Znj1RLWNlYy3fP4P9IQMwn2YeNeM+X23Pv9jdZ63HbHFnFuHHbgyNjg+4nfa+tB+6u/bjqVK2NYDnHcwfYpcK28NJPgL8K/+BtPA6/N4uHUMvGTIWuFPiOdD+7xcb2d1EPmKTIUxL4/Z9OgQx3BPaXnH4LA4Zm0zqB3ke1lpZa97e5xMSjrKIuciDGuheRSOLLvQNwMgMLVTEDwgkoqtIfCivAR0q7RgoV/jq9sDKCAzeVt5KJzkLVTvL9+kfr47kvjExsqhY0S3Rws+IOO58xZCPE7jVSCHehY2qTkwdH+cq+feYzM/m9hlyDgziMOJUrcCrynjWur2OVK5swQ6PTIxW3UNLUTxgX0OvY=
-  app: photoboard
-  on:
-    repo: lfaudreejr/PhotoBoard
 before_install:
 - openssl aes-256-cbc -K $encrypted_8ccd6defe5da_key -iv $encrypted_8ccd6defe5da_iv
   -in index.js.enc -out ./client/src/config/index.js -d
+deploy:
+  provider: heroku
+  api_key:
+    secure: mxgIFPLxzCWl4nr2Vb8s8M7bw6YSc8Zz770RVwxIPYaKplHvgPbdCv7f5Y3VVvbvcK0L4WkwzzlvyVqZG3VvohL+kQYbIrwHY9wVif5vghJG8rML//mxQ2P39VyhabwgwXWNe/BE0PnjhgGbAzi153lcB1ePvcA9J1glEwI352yvvMA66QagmlT38NALkE5usgxyFuVPXyYLeUQpCPF6DTywpSJEtxPNFPahjF9AMDEB+gtXLFeDJ/xCiuNRN85qb5nGkXkz7pzP2nDOu12aG24K/VnoNNPNR74PgHRWAvVWngvj5xu+WAW2xgdykZBt2BFmlCD2OMPVH41+hJzp2JqFY8bSDwXN8zCthsQ1kH4AhOI/3zbAta6K8k9dYG+tOKG77lII7TxatllQ0CfBiK+DA8gS8w5DXbdlFJzvl6dcRXxT65BJNVhuXe8NF0ewZHjgFY2v3CUMZ3WKKZ0WttqaTJGouT4dnDbTvFrSvNBSHjcYL17Kd1LLs/BlZvV/jq/NPmV1yzLwVQdXo1utxeh52PhMMJ3jmQ7vUvLKrsVmeR4F4BqFVAkdWb1q+GIGv47x2y7TkJxaB6iHXO4NuZ1pODITkZv/s0OUWB7v4wbK0d2OKlUoR/0J8J6cLyTxK6fYnr5Nw9MTCV6MFQQ81T6G1QMyUFAIJULfoj3kbpk=
+  app: photoboard
+  on:
+    repo: lfaudreejr/PhotoBoard
