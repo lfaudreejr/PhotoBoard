@@ -6,7 +6,6 @@
     "outDir": "server-build",
     "rootDir": "server",
     "removeComments": true,
-    "isolatedModules": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true
   },

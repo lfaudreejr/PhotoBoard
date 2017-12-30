@@ -1,6 +1,6 @@
 import { Response, Request } from 'express'
 
-import { savePin, getPins, getAPin, deletePinFromPins, deletePinFromUserBoard } from './pin-funcs'
+import { savePin, getPins, getAPin, deletePinFromPins, deletePinFromUserBoard, updateAPin } from './pin-funcs'
 import { addPinToBoard } from '../boards/board-funcs'
 
 export function createPin (req: Request, res: Response) {
@@ -25,6 +25,12 @@ export function getPin (req: Request, res: Response) {
   .catch((err) => res.status(500).json(err.message))
 }
 
-export function deleteAPin(req: Request, res: Response) {
+export function deleteAPin (req: Request, res: Response) {
   Promise.all([deletePinFromPins(req.params.id), deletePinFromUserBoard(req.headers.profile, req.params.id) ]).then((data) => res.json(data)).catch((err) => res.status(500).json(err.message))
+}
+
+export function updatePin (req: Request, res: Response) {
+  updateAPin(req.params.id, req.body.description)
+  .then((data) => res.json(data))
+  .catch((err) => res.status(500).json(err.message))
 }

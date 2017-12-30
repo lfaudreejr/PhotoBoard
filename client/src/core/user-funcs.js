@@ -1,4 +1,4 @@
-import { get, post, destroy, getId, getProfile } from '../api'
+import { get, put, post, destroy, getId, getProfile } from '../api'
 
 export const currentUser = () => getId()
 export const getUserProfile = () => getProfile()
@@ -44,4 +44,8 @@ export function getAllPins () {
 
 export function getAPinById (id) {
   return get(`/api/pins/${id}`)
+}
+
+export function updateAPin (id, desc) {
+  return put(`/api/pins/${id}`, { description: desc })
 }
