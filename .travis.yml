@@ -6,7 +6,7 @@ cache:
   directories:
   - node_modules
 before_deploy:
-  - sh scripts/remove-ignore.sh
+- sh scripts/remove-ignore.sh
 deploy:
   provider: heroku
   skip_cleanup: true
@@ -15,3 +15,6 @@ deploy:
   app: photoboard
   on:
     repo: lfaudreejr/PictureBoard
+before_install:
+- openssl aes-256-cbc -K $encrypted_8ccd6defe5da_key -iv $encrypted_8ccd6defe5da_iv
+  -in index.js.enc -out ./client/config/index.js -d

@@ -1,5 +1,6 @@
 import auth0 from 'auth0-js'
 import EventEmitter from 'eventemitter3'
+import * as api from '../api'
 import config from '../config'
 import router from '../router'
 
@@ -13,7 +14,7 @@ const getAuth = (() => {
         domain: config.DOMAIN,
         clientID: config.CLIENT_ID,
         redirectUri: config.REDIRECT_URI,
-        audience: `https://${config.DOMAIN}/userinfo`,
+        audience: 'https://photoboard.herokuapp.com/api',
         responseType: 'token id_token',
         scope: 'openid profile'
       })
@@ -22,18 +23,27 @@ const getAuth = (() => {
   }
 })()
 
+function loginToApi () {
+  return api.post('/api/user/profile', {_id: api.getId()}).then((data) => console.log(data)).catch((err) => console.error(err.message))
+}
+
 function setSession (authResult) {
   let expiresAt = JSON.stringify(authResult.expiresIn * 1000 + new Date().getTime())
   localStorage.setItem('access_token', authResult.accessToken)
   localStorage.setItem('id_token', authResult.idToken)
   localStorage.setItem('expires_at', expiresAt)
-  authNotifier.emit('authChange', { authenticated: true })
+  return authNotifier.emit('authChange', { authenticated: true })
 }
 
 function getProfile (authResult) {
   getAuth().client.userInfo(authResult.accessToken, (err, user) => {
     if (err) console.log(err)
-    localStorage.setItem('profile', JSON.stringify(user.nickname))
+    localStorage.setItem('id', JSON.stringify(user.sub))
+    localStorage.setItem('profile', JSON.stringify(user))
+    authNotifier.emit('profileChange', { currentUser: api.getId() })
+    return setTimeout(() => {
+      loginToApi()
+    }, 1000)
   })
 }
 function isAuthenticated () {
@@ -42,17 +52,18 @@ function isAuthenticated () {
   let expiresAt = JSON.parse(localStorage.getItem('expires_at'))
   return new Date().getTime() < expiresAt
 }
-
+/**
+ * Exports
+*/
 export const login = () => getAuth().authorize()
-export const handleLogin = () => getAuth().parseHash((err, authResult) => {
+export const handleLogin = () => getAuth().parseHash(async (err, authResult) => {
   if (authResult && authResult.accessToken && authResult.idToken) {
-    setSession(authResult)
-    getProfile(authResult)
-    return router.replace('/dashboard')
+    await setSession(authResult)
+    await getProfile(authResult)
+    return router.replace('/')
   } else if (err) {
-    router.replace('/')
+    setTimeout(() => router.replace('/'), 1000)
     console.error(err)
-    alert(`Error: ${err.error}. Check the console for further details.`)
   }
 })
 export const logout = () => {
@@ -60,8 +71,11 @@ export const logout = () => {
   localStorage.removeItem('id_token')
   localStorage.removeItem('expires_at')
   localStorage.removeItem('profile')
-  authNotifier.emit('authChange', false)
+  localStorage.removeItem('id')
+  authNotifier.emit('authChange', { authenticated: false })
+  authNotifier.emit('profileChange', { currentUser: null })
   router.replace('/')
 }
 export const authNotifier = new EventEmitter()
 export const authenticated = isAuthenticated()
+export const currentUser = api.getId()

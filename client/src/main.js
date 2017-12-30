@@ -4,10 +4,12 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import VueMaterial from 'vue-material'
+import {VueMasonryPlugin} from 'vue-masonry'
 import 'vue-material/dist/vue-material.min.css'
-import 'vue-material/dist/theme/default.css'
+import './assets/scss/main.scss'
 
 Vue.use(VueMaterial)
+Vue.use(VueMasonryPlugin)
 
 Vue.config.productionTip = false
 

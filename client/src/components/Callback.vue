@@ -1,7 +1,6 @@
 <template>
   <div class="spinner">
-    <!-- <img src="../../assets/loading.gif" alt="loading"/> -->
-    <h3>Loading...</h3>
+    <md-progress-bar md-mode="indeterminate"></md-progress-bar>
   </div>
 </template>
 

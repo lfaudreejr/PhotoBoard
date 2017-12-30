@@ -1,0 +1,65 @@
+@import "~vue-material/dist/theme/engine"; // Import the theme engine
+
+@import "./variables";
+
+@include md-register-theme("default", (
+  primary: $primary-color, // The primary color of your application
+  accent: $accent-color, // The accent or secondary color
+  theme: dark
+  ));
+
+@import "~vue-material/dist/theme/all"; // Apply the theme
+
+.profile {
+  padding-left: 5%;
+  padding-right: 5%;
+}
+.board-card {
+  height: 100%;
+  width: 100%
+}
+.board:hover {
+  -moz-transform: scale(1.05);
+  -webkit-transform: scale(1.05);
+  transform: scale(1.05);
+  cursor: pointer;
+}
+.board {
+  width: 100%;
+  height: auto;
+}
+.board-button {
+  position: relative;
+  background-color: $accent-color;
+  color: white;
+}
+.round-edges {
+  border-radius: 5%;
+}
+.text-center {
+  text-align: center;
+}
+.tile {
+  width: 30%;
+  margin: 1%;
+}
+.home-tile {
+  width: 30%;
+  margin: 1%;
+}
+.inner-tile {
+  width: 30%;
+  margin: 1%;
+}
+
+@media (max-width: 560px) {
+  .home-tile {
+    width: 100%;
+  }
+  .tile {
+    width: 100%;
+  }
+  .board-card {
+    width: 100%;
+  }
+}
