@@ -40,9 +40,15 @@
     <!-- show modal to edit pin -->
     <md-dialog :md-active.sync="editPinModalControl" class="dialog">
       <md-dialog-title>Edit Pin</md-dialog-title>
+      <md-card-content>
+        <md-field>
+          <label for="editDescription">Edit Description</label>
+          <md-input name="editDescription" v-model="editPinDescription"></md-input>
+        </md-field>
+      </md-card-content>
       <md-dialog-actions>
         <md-button @click="showEditPinModal(false)">Cancel</md-button>
-        <md-button @click="submitEdit()">Submit</md-button>
+        <md-button @click="submitPinEdit()">Submit</md-button>
       </md-dialog-actions>
     </md-dialog>
     <!-- show modal to add pin to user board if not already -->
@@ -93,7 +99,8 @@ export default {
       showCreateBoardDialogControl: false,
       confirmDeletePinControl: false,
       createBoardTitle: null,
-      currentBoards: null
+      currentBoards: null,
+      editPinDescription: null
     }
   },
   methods: {
@@ -106,6 +113,7 @@ export default {
     },
     showEditPinModal (method) {
       this.editPinModalControl = method
+      this.editPinDescription = null
     },
     showSavePinModal (method) {
       this.savePinModalControl = method
@@ -139,6 +147,18 @@ export default {
       }).then((data) => {
         this.savePinToBoard(data.data._id)
       })
+    },
+    submitPinEdit () {
+      user.updateAPin(this.$route.params.id, this.editPinDescription)
+      this.getPinData()
+      this.showEditPinModal(false)
+    },
+    getPinData () {
+      user.getAPinById(this.$route.params.id)
+      .then((data) => {
+        this.pin = data.data
+      })
+      .catch((err) => console.error(err))
     }
   },
   computed: {
@@ -147,11 +167,7 @@ export default {
     }
   },
   mounted () {
-    user.getAPinById(this.$route.params.id)
-    .then((data) => {
-      this.pin = data.data
-    })
-    .catch((err) => console.error(err))
+    this.getPinData()
     if (user.currentUser()) {
       user.getUserBoards().then((data) => {
         this.currentBoards = data.data
