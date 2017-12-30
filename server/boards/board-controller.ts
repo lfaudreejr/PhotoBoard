@@ -8,7 +8,7 @@ export function createBoard (req: Request, res: Response) {
     owner: req.body.owner
   })
   .then((data) => {
-    const { ops } = data
+    const { ops }: any = data
     return res.json(ops[0])
   })
   .catch((err) => res.status(500).json(err.message))
