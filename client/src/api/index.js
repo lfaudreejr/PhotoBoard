@@ -5,7 +5,7 @@ export const getToken = () => {
 }
 
 export const getProfile = () => {
-  return JSON.parse(localStorage.getItem('profile'))
+  return JSON.parse(localStorage.getItem('profile')).name
 }
 
 export const getId = () => {

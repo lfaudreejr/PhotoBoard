@@ -27,7 +27,7 @@ export default {
     login,
     logout,
     gotoProfile () {
-      this.$router.push({name: 'Profile', params: { id: getProfile().name }})
+      this.$router.push({name: 'Profile', params: { id: getProfile() }})
     }
   }
 }

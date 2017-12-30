@@ -1,6 +1,7 @@
-import { get, post, destroy, getId } from '../api'
+import { get, post, destroy, getId, getProfile } from '../api'
 
 export const currentUser = () => getId()
+export const getUserProfile = () => getProfile()
 
 export function createABoard (board) {
   return post('/api/boards', board)
@@ -35,6 +36,10 @@ export async function getUserPins () {
   })
   const newBoards = await Promise.all(PromiseArray)
   return newBoards.map((newBoard) => newBoard)
+}
+
+export function getAllPins () {
+  return get('/api/pins/all')
 }
 
 export function getAPinById (id) {

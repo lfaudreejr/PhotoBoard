@@ -7,7 +7,10 @@ export function createBoard (req: Request, res: Response) {
     pins: [],
     owner: req.body.owner
   })
-  .then((data) => res.json(data))
+  .then((data) => {
+    const { ops } = data
+    return res.json(ops[0])
+  })
   .catch((err) => res.status(500).json(err.message))
 }
 

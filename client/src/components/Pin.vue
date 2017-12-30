@@ -48,10 +48,33 @@
     <!-- show modal to add pin to user board if not already -->
     <md-dialog :md-active.sync="savePinModalControl" class="dialog">
       <md-dialog-title>Select a board to save pin to.</md-dialog-title>
+      <md-dialog-content>
+        <!-- show create a board if for saving pin dialog -->
+        <div>
+          <md-button @click="toggleCreateABoardDialog(true)">Create Board</md-button>
+        </div>
+        <!-- show users boards -->
+        <div v-if="currentBoards" v-for="board in currentBoards" :key="board._id">
+          <md-button @click="savePinToBoard(board._id)">{{board.title}}</md-button>
+        </div>
+      </md-dialog-content>
       <md-dialog-actions>
-        <md-button @click="showSavePinModal(false)">Cancel</md-button>
-        <md-button @click="submitSave()">Submit</md-button>
+        <md-button class="md-primary" @click="showSavePinModal(false)">Cancel</md-button>
       </md-dialog-actions>
+    </md-dialog>
+    <!-- create board dialog -->
+    <md-dialog :md-active.sync="showCreateBoardDialogControl">
+      <md-dialog-title>Create Board</md-dialog-title>
+      <md-dialog-content>
+        <md-field md-clearable>
+          <label for="board-name">Board name</label>
+          <md-input name="board-name" v-model="createBoardTitle"></md-input>
+        </md-field>
+        <md-dialog-actions>
+          <md-button v-on:click.native="toggleCreateABoardDialog(false)">Cancel</md-button>
+          <md-button v-on:click.native="createABoardToAddPin(createBoardTitle)">Create</md-button>
+        </md-dialog-actions>
+      </md-dialog-content>
     </md-dialog>
   </div>
 </template>
@@ -67,7 +90,10 @@ export default {
       pin: null,
       editPinModalControl: false,
       savePinModalControl: false,
-      confirmDeletePinControl: false
+      showCreateBoardDialogControl: false,
+      confirmDeletePinControl: false,
+      createBoardTitle: null,
+      currentBoards: null
     }
   },
   methods: {
@@ -87,8 +113,33 @@ export default {
     showConfirmDeletePinModal (method) {
       this.confirmDeletePinControl = method
     },
-    savePin () {}, // TODO:
-    showBoards () {} // TODO:
+    toggleCreateABoardDialog (method) {
+      this.showCreateBoardDialogControl = method
+    },
+    savePinToBoard (boardId) {
+      const pin = {
+        url: this.pin.url,
+        description: this.pin.description,
+        uploaded_by: this.pin.uploaded_by,
+        saved_by: user.currentUser()
+      }
+      const board = {
+        _id: boardId
+      }
+      user.addPinToUserBoard(pin, board)
+      .then((data) => {
+        this.$router.replace(`/${user.getUserProfile()}/dashboard/${data.data.value.title}`)
+      })
+      .catch((err) => console.error(err))
+    },
+    createABoardToAddPin (title) {
+      user.createABoard({
+        title: title,
+        owner: user.currentUser()
+      }).then((data) => {
+        this.savePinToBoard(data.data._id)
+      })
+    }
   },
   computed: {
     currentUser () {
@@ -101,6 +152,11 @@ export default {
       this.pin = data.data
     })
     .catch((err) => console.error(err))
+    if (user.currentUser()) {
+      user.getUserBoards().then((data) => {
+        this.currentBoards = data.data
+      })
+    }
   }
 }
 </script>
