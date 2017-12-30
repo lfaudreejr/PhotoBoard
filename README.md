@@ -16,7 +16,7 @@ Pinterest clone build with Typescript, NodeJs, Express, VueJs, MongoDb, MasonryJ
 
 ---
 
-#### The app is deployed to [PollMe](https://photoboard.herokuapp.com/)
+#### The app is deployed to [PhotoBoard](https://photoboard.herokuapp.com/)
 
 ### Meta
 
