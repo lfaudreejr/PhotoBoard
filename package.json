@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./server-build/bin/index.js",
+    "heroku-prebuild": "cd client && npm run build",
     "prod:test": "NODE_ENV=production npm run start",
     "debug": "DEBUG=photoboard:* npm run build:live",
     "dev": "NODE_ENV=development concurrently \"npm run dev:client\" \"npm run debug\"",
