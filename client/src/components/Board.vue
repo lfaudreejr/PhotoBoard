@@ -32,9 +32,19 @@
             </md-card-media>
             <md-card-area>
               <md-card-actions>
-                <md-button class="md-icon-button" @click="deletePinFromBoard(pin._id)">
+                <md-button class="md-icon-button" @click="showConfirmDeletePinModal(true)">
                   <md-icon>delete</md-icon>
                 </md-button>
+              <!-- Show modal to confirm delete of pin -->
+                <md-dialog-confirm
+                :md-active.sync="confirmDeletePinControl"
+                md-title="Confirm"
+                md-content="Are you sure you want to delete this pin?"
+                md-confirm-text="Delete"
+                md-cancel-text="Cancel"
+                @md-cancel="showConfirmDeletePinModal(false)"
+                @md-confirm="deletePinFromBoard(pin._id)"
+                />
                 <md-button class="md-icon-button" @click.native="gotoPin(pin)">
                   <md-icon>pageview</md-icon>
                 </md-button>
@@ -79,6 +89,7 @@ export default {
   data () {
     return {
       showDialogProp: false,
+      confirmDeletePinControl: false,
       title: this.$route.params.board,
       board: {
         pins: null
@@ -97,6 +108,9 @@ export default {
   methods: {
     showDialog (method) {
       this.showDialogProp = method
+    },
+    showConfirmDeletePinModal (method) {
+      this.confirmDeletePinControl = method
     },
     addPinToBoard () {
       this.showDialog(false)

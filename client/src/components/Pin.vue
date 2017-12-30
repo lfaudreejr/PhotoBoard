@@ -11,9 +11,19 @@
           </md-card-content>
           <!-- show if current pin owner -->
           <md-card-actions v-if="currentUser === pin.saved_by">
-            <md-button class="md-icon-button" @click="deletePinFromBoard(pin._id)">
+            <md-button class="md-icon-button" @click="showConfirmDeletePinModal(true)">
               <md-icon>delete</md-icon>
             </md-button>
+                <!-- Show modal to confirm delete of pin -->
+            <md-dialog-confirm
+            :md-active.sync="confirmDeletePinControl"
+            md-title="Confirm"
+            md-content="Are you sure you want to delete this pin?"
+            md-confirm-text="Delete"
+            md-cancel-text="Cancel"
+            @md-cancel="showConfirmDeletePinModal(false)"
+            @md-confirm="deletePinFromBoard(pin._id)"
+            />
             <md-button class="md-icon-button" @click.native="showEditPinModal(true)">
               <md-icon>edit</md-icon>
             </md-button>
@@ -56,7 +66,8 @@ export default {
     return {
       pin: null,
       editPinModalControl: false,
-      savePinModalControl: false
+      savePinModalControl: false,
+      confirmDeletePinControl: false
     }
   },
   methods: {
@@ -72,6 +83,9 @@ export default {
     },
     showSavePinModal (method) {
       this.savePinModalControl = method
+    },
+    showConfirmDeletePinModal (method) {
+      this.confirmDeletePinControl = method
     },
     savePin () {}, // TODO:
     showBoards () {} // TODO:
