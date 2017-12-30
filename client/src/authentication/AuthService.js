@@ -32,7 +32,7 @@ function setSession (authResult) {
   localStorage.setItem('access_token', authResult.accessToken)
   localStorage.setItem('id_token', authResult.idToken)
   localStorage.setItem('expires_at', expiresAt)
-  authNotifier.emit('authChange', { authenticated: true })
+  return authNotifier.emit('authChange', { authenticated: true })
 }
 
 function getProfile (authResult) {
@@ -40,7 +40,8 @@ function getProfile (authResult) {
     if (err) console.log(err)
     localStorage.setItem('id', JSON.stringify(user.sub))
     localStorage.setItem('profile', JSON.stringify(user))
-    setTimeout(() => {
+    authNotifier.emit('profileChange', { currentUser: api.getId() })
+    return setTimeout(() => {
       loginToApi()
     }, 1000)
   })
@@ -71,8 +72,10 @@ export const logout = () => {
   localStorage.removeItem('expires_at')
   localStorage.removeItem('profile')
   localStorage.removeItem('id')
-  authNotifier.emit('authChange', false)
+  authNotifier.emit('authChange', { authenticated: false })
+  authNotifier.emit('profileChange', { currentUser: null })
   router.replace('/')
 }
 export const authNotifier = new EventEmitter()
 export const authenticated = isAuthenticated()
+export const currentUser = api.getId()

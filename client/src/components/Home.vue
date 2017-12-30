@@ -10,7 +10,7 @@
 
             <md-card-area>
               <md-card-actions v-if="authenticated">
-                <md-button class="md-icon-button" @click="updateClickedPin(pin), showSavePinDialog(true)">
+                <md-button v-if="currentUser !== pin.saved_by" class="md-icon-button" @click="updateClickedPin(pin), showSavePinDialog(true)">
                   <md-icon>bookmark</md-icon>
                 </md-button>
 
@@ -64,7 +64,7 @@ import * as user from '../core/user-funcs.js'
 
 export default {
   name: 'main',
-  props: ['authenticated'],
+  props: ['authenticated', 'currentUser'],
   data () {
     return {
       menuVisible: false,
@@ -133,12 +133,14 @@ export default {
     }
   },
   mounted () {
-    this.loadPins()
-    if (user.currentUser()) {
-      user.getUserBoards().then((data) => {
-        this.currentBoards = data.data
-      })
-    }
+    this.$nextTick(function () {
+      this.loadPins()
+      if (user.currentUser()) {
+        user.getUserBoards().then((data) => {
+          this.currentBoards = data.data
+        }).catch((err) => console.error(err))
+      }
+    })
   },
   updated () {
     this.$redrawVueMasonry()

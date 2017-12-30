@@ -1,13 +1,14 @@
 <template>
   <div id="app">
     <navbar :authenticated='authenticated'></navbar>
-    <router-view :authenticated='authenticated'></router-view>
+    <router-view :authenticated='authenticated' :currentUser="currentUser"></router-view>
   </div>
 </template>
 
 <script>
 import Navbar from './components/Navbar'
-import {authenticated, authNotifier} from './authentication/AuthService.js'
+import {authenticated, authNotifier, currentUser} from './authentication/AuthService.js'
+
 export default {
   name: 'app',
   components: {
@@ -17,8 +18,12 @@ export default {
     authNotifier.on('authChange', authState => {
       this.authenticated = authState.authenticated
     })
+    authNotifier.on('profileChange', authState => {
+      this.currentUser = authState.currentUser
+    })
     return {
-      authenticated
+      authenticated,
+      currentUser
     }
   }
 }
