@@ -17,12 +17,12 @@ boardRouter.get('/:name', jwtCheck, board.getBoard)
 /**
  * Update a board
  */
-// boardRouter.put('/')
+boardRouter.put('/:name', jwtCheck, board.updateBoard)
 
 /**
  * Delete a board
  */
-// boardRouter.delete('/')
+boardRouter.delete('/:id', jwtCheck, board.deleteBoard)
 
 
 export default boardRouter

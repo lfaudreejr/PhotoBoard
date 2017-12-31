@@ -40,8 +40,19 @@
               </div>
             </md-card-content>
           </md-ripple>
-          <md-button @click="openBoardEditModal()">edit</md-button>
+          <md-button @click="openBoardEditModal(true), setEditBoard(board)">edit</md-button>
+          <md-button @click="openDeleteConfirmModal(true)">Delete</md-button>
         </md-card>
+        <!-- Confirm Delete Board MODAL -->
+        <md-dialog-confirm
+          :md-active.sync="openDeleteDialogProp"
+          md-title="Are you sure?"
+          md-content="Deleting a board and it's pins is permanent."
+          md-confirm-text="Delete"
+          md-cancel-text="Cancel"
+          @md-cancel="openDeleteConfirmModal(false)"
+          @md-confirm="confirmDelete(board._id)"
+        ></md-dialog-confirm>
       </div>
 
     </div>
@@ -63,6 +74,22 @@
         </md-dialog-actions>
       </div>
     </md-dialog>
+
+    <!-- MODAL for Editing a Board -->
+    <md-dialog :md-active.sync="showEditBoardDialogProp" class="dialog">
+      <md-dialog-title>Edit board</md-dialog-title>
+      <md-dialog-content>
+        <md-field md-clearable>
+          <label for="new-title">Title</label>
+          <md-input name="new-title" v-model="newBoardTitle"></md-input>
+        </md-field>
+      </md-dialog-content>
+      <md-dialog-actions>
+        <md-button @click="openBoardEditModal(false)">Cancel</md-button>
+        <md-button @click="submitBoardEdit()">Save</md-button>
+      </md-dialog-actions>
+    </md-dialog>
+
   </div>
 </template>
 
@@ -74,10 +101,14 @@ export default {
   data () {
     return {
       showCreateBoardDialogProp: false,
+      showEditBoardDialogProp: false,
+      openDeleteDialogProp: false,
       modal: {
         boardName: ''
       },
-      boards: null
+      boards: null,
+      newBoardTitle: null,
+      editingBoard: null
     }
   },
   computed: {
@@ -95,7 +126,29 @@ export default {
     showCreateBoardDialog (method) {
       this.showCreateBoardDialogProp = method
     },
-    openBoardEditModal () {}, // TODO:
+    openBoardEditModal (method) {
+      this.showEditBoardDialogProp = method
+    },
+    openDeleteConfirmModal (method) {
+      this.openDeleteDialogProp = method
+    },
+    setEditBoard (board) {
+      this.editingBoard = board
+    },
+    confirmDelete (boardId) {
+      user.deleteABoard(boardId)
+      .then((data) => {
+        this.getBoards()
+        .then((data) => {
+          this.boards = data.data
+          this.getPins()
+          this.editingBoard = null
+        })
+        .catch((err) => console.error(err))
+        this.openBoardEditModal(false)
+      })
+      .catch((err) => console.error(err))
+    },
     createBoard () {
       user.createABoard({title: this.modal.boardName, owner: user.currentUser()})
       .then((data) => {
@@ -103,6 +156,19 @@ export default {
       }).catch((err) => {
         console.error(err)
       })
+    },
+    submitBoardEdit () {
+      user.updateABoard(this.editingBoard.title, { title: this.newBoardTitle }).then((data) => {
+        this.getBoards()
+        .then((data) => {
+          this.boards = data.data
+          this.getPins()
+          this.newBoardTitle = null
+        })
+        .catch((err) => console.error(err))
+        this.openBoardEditModal(false)
+      })
+      .catch((err) => console.error(err))
     },
     gotoBoard (boardName) {
       this.$router.push({name: 'Board', params: { board: boardName }})
