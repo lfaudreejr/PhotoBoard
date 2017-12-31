@@ -22,3 +22,11 @@ function getBoardPins(pinId) {
     return mongoService_1.default.readOne({ _id: new mongodb_1.ObjectID(pinId) }, 'pins');
 }
 exports.getBoardPins = getBoardPins;
+function editBoard(board, update) {
+    return mongoService_1.default.update(board, 'boards', update);
+}
+exports.editBoard = editBoard;
+function deleteABoard(boardId) {
+    return mongoService_1.default.destroy({ _id: new mongodb_1.ObjectID(boardId) }, 'boards');
+}
+exports.deleteABoard = deleteABoard;

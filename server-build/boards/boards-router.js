@@ -6,4 +6,6 @@ const jwtCheck_1 = require("../middleware/jwtCheck");
 const boardRouter = express_1.Router();
 boardRouter.post('/', jwtCheck_1.default, board.createBoard);
 boardRouter.get('/:name', jwtCheck_1.default, board.getBoard);
+boardRouter.put('/:name', jwtCheck_1.default, board.updateBoard);
+boardRouter.delete('/:id', jwtCheck_1.default, board.deleteBoard);
 exports.default = boardRouter;

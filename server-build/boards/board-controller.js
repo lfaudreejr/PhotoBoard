@@ -31,3 +31,16 @@ function getBoard(req, res) {
         .catch((err) => res.status(500).json(err.message));
 }
 exports.getBoard = getBoard;
+function updateBoard(req, res) {
+    board_funcs_1.editBoard({ title: req.params.name }, { $set: { title: req.body.title } })
+        .then((data) => res.json(data))
+        .catch((err) => res.status(500).json(err.message));
+}
+exports.updateBoard = updateBoard;
+function deleteBoard(req, res) {
+    console.log('request', req.params);
+    board_funcs_1.deleteABoard(req.params.id)
+        .then((data) => res.json(data))
+        .catch((err) => res.status(500).json(err));
+}
+exports.deleteBoard = deleteBoard;
