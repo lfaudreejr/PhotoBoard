@@ -49,3 +49,11 @@ export function getAPinById (id) {
 export function updateAPin (id, desc) {
   return put(`/api/pins/${id}`, { description: desc })
 }
+
+export function updateABoard (board, update) {
+  return put(`/api/boards/${board}`, update)
+}
+
+export function deleteABoard (id) {
+  return destroy(`/api/boards/${id}`)
+}

@@ -1,5 +1,5 @@
 import { Response, Request } from 'express'
-import { getABoardByTitleAndOwner, saveBoard, getBoardPins } from '../boards/board-funcs'
+import { getABoardByTitleAndOwner, saveBoard, getBoardPins, editBoard, deleteABoard } from '../boards/board-funcs'
 
 export function createBoard (req: Request, res: Response) {
   saveBoard({
@@ -41,4 +41,16 @@ export function getBoard (req: Request, res: Response) {
     .catch((err) => res.status(500).json(err.message))
   })
   .catch((err) => res.status(500).json(err.message))
+}
+
+export function updateBoard (req: Request, res: Response) {
+  editBoard({ title: req.params.name }, { $set: { title: req.body.title } })
+  .then((data) => res.json(data))
+  .catch((err) => res.status(500).json(err.message))
+}
+export function deleteBoard (req: Request, res: Response) {
+  console.log('request', req.params)
+  deleteABoard(req.params.id)
+  .then((data) => res.json(data))
+  .catch((err) => res.status(500).json(err))
 }

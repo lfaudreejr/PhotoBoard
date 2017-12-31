@@ -17,8 +17,8 @@
                 <!-- Show modal to confirm delete of pin -->
             <md-dialog-confirm
             :md-active.sync="confirmDeletePinControl"
-            md-title="Confirm"
-            md-content="Are you sure you want to delete this pin?"
+            md-title="Are you sure?"
+            md-content="Deleting a pin is permanent."
             md-confirm-text="Delete"
             md-cancel-text="Cancel"
             @md-cancel="showConfirmDeletePinModal(false)"

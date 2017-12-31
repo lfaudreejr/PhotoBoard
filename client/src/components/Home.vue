@@ -9,8 +9,8 @@
             </md-card-media>
 
             <md-card-area>
-              <md-card-actions v-if="authenticated">
-                <md-button v-if="currentUser !== pin.saved_by" class="md-icon-button" @click="updateClickedPin(pin), showSavePinDialog(true)">
+              <md-card-actions>
+                <md-button v-if="authenticated && currentUser !== pin.saved_by" class="md-icon-button" @click="updateClickedPin(pin), showSavePinDialog(true)">
                   <md-icon>bookmark</md-icon>
                 </md-button>
 

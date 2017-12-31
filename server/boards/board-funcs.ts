@@ -20,3 +20,11 @@ export function addPinToBoard (pinId: string, id: string): Promise<FindAndModify
 export function getBoardPins (pinId: string) {
   return mongo.readOne({ _id: new ObjectID(pinId) }, 'pins')
 }
+
+export function editBoard (board, update) {
+  return mongo.update(board, 'boards', update)
+}
+
+export function deleteABoard (boardId) {
+  return mongo.destroy({ _id: new ObjectID(boardId) }, 'boards')
+}
