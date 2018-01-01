@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div v-if="loading">
+      <md-progress-bar md-mode="query" class="md-accent"></md-progress-bar>
+    </div>
     <div v-masonry transition-duration='0.3s' item-selector='.home-tile' v-if="pins">
       <div v-masonry-tile class="home-tile" v-for="pin in pins" :key="pin._id">
         <md-card>
@@ -67,6 +70,7 @@ export default {
   props: ['authenticated', 'currentUser'],
   data () {
     return {
+      loading: false,
       menuVisible: false,
       savePinDialogControl: false,
       createABoardToAddPinControl: false,
@@ -78,18 +82,7 @@ export default {
   },
   methods: {
     loadPins () {
-      user.getAllPins()
-      .then((data) => {
-        this.pins = data.data
-      })
-      .catch((err) => console.error(err))
-    },
-    loadUserBoards () {
-      user.getUserBoards()
-      .then((data) => {
-        this.currentBoards = data.data
-      })
-      .catch((err) => console.error(err))
+      return user.getAllPins()
     },
     updateClickedPin (pin) {
       this.clickedPin = pin
@@ -121,29 +114,41 @@ export default {
       this.createABoardToAddPinControl = method
     },
     createABoardToAddPin (boardName) {
+      this.loading = true
       user.createABoard({
         title: boardName,
         owner: user.currentUser()
       }).then((data) => {
+        this.loading = false
         this.savePinToBoard(data.data._id)
       })
     },
     gotoPin (pin) {
       this.$router.replace(`/pins/${pin._id}`)
+    },
+    fetchData () {
+      this.loading = true
+      this.loadPins()
+      .then((data) => {
+        this.pins = data.data
+        if (user.currentUser()) {
+          user.getUserBoards().then((data) => {
+            this.currentBoards = data.data
+          }).catch((err) => console.error(err))
+        }
+        this.loading = false
+      })
+      .catch((err) => console.error(err))
     }
   },
-  mounted () {
-    this.$nextTick(function () {
-      this.loadPins()
-      if (user.currentUser()) {
-        user.getUserBoards().then((data) => {
-          this.currentBoards = data.data
-        }).catch((err) => console.error(err))
-      }
-    })
+  created () {
+    this.fetchData()
   },
   updated () {
     this.$redrawVueMasonry()
+  },
+  watch: {
+    '$route': 'fetchData'
   }
 }
 </script>

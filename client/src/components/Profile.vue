@@ -1,5 +1,8 @@
 <template>
   <div class="profile">
+    <div v-if="loading">
+      <md-progress-bar md-mode="query" class="md-accent"></md-progress-bar>
+    </div>
     <div class="md-layout md-gutter md-alignment-top-center">
       <div class="md-layout-item md-size-70">
         <p class="md-display-1">{{username}}</p>
@@ -100,6 +103,7 @@ export default {
   name: 'profile',
   data () {
     return {
+      loading: false,
       showCreateBoardDialogProp: false,
       showEditBoardDialogProp: false,
       openDeleteDialogProp: false,
@@ -136,12 +140,13 @@ export default {
       this.editingBoard = board
     },
     confirmDelete (boardId) {
+      this.loading = true
       user.deleteABoard(boardId)
       .then((data) => {
-        this.getBoards()
+        this.getPins()
         .then((data) => {
-          this.boards = data.data
-          this.getPins()
+          this.loading = false
+          this.boards = data
           this.editingBoard = null
         })
         .catch((err) => console.error(err))
@@ -158,17 +163,17 @@ export default {
       })
     },
     submitBoardEdit () {
+      this.loading = true
       user.updateABoard(this.editingBoard.title, { title: this.newBoardTitle }).then((data) => {
-        this.getBoards()
-        .then((data) => {
-          this.boards = data.data
-          this.getPins()
-          this.newBoardTitle = null
+        this.getPins().then((data) => {
+          this.loading = false
+          this.boards = data
         })
         .catch((err) => console.error(err))
         this.openBoardEditModal(false)
       })
       .catch((err) => console.error(err))
+      this.newBoardTitle = null
     },
     gotoBoard (boardName) {
       this.$router.push({name: 'Board', params: { board: boardName }})
@@ -177,20 +182,22 @@ export default {
       return user.getUserBoards()
     },
     getPins () {
-      if (this.boards) {
-        user.getUserPins().then((data) => {
-          this.boards = data
-        })
-      }
+      return user.getUserPins()
+    },
+    fetchData () {
+      this.loading = true
+      this.getPins().then((data) => {
+        this.boards = data
+        this.loading = false
+      })
+      .catch((err) => console.error(err))
     }
   },
-  mounted () {
-    this.getBoards()
-    .then((data) => {
-      this.boards = data.data
-      this.getPins()
-    })
-    .catch((err) => console.error(err))
+  created () {
+    this.fetchData()
+  },
+  watch: {
+    '$route': 'fetchData'
   }
 }
 </script>

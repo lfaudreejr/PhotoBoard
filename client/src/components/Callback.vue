@@ -1,6 +1,6 @@
 <template>
   <div class="spinner">
-    <md-progress-bar md-mode="indeterminate"></md-progress-bar>
+    <md-progress-bar md-mode="indeterminate" class="md-accent"></md-progress-bar>
   </div>
 </template>
 

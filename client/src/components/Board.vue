@@ -1,5 +1,8 @@
 <template>
   <div class="profile">
+    <div v-if="loading">
+      <md-progress-bar md-mode="query" class="md-accent"></md-progress-bar>
+    </div>
 
     <div class="md-layout md-gutter md-alignment-top-center">
       <div class="md-layout-item md-size-70">
@@ -88,6 +91,7 @@ export default {
   name: 'board',
   data () {
     return {
+      loading: false,
       showDialogProp: false,
       confirmDeletePinControl: false,
       title: this.$route.params.board,
@@ -114,6 +118,7 @@ export default {
     },
     addPinToBoard () {
       this.showDialog(false)
+      this.loading = true
       const pin = {
         url: this.modal.url,
         description: this.modal.description,
@@ -128,6 +133,11 @@ export default {
         this.modal.url = null
         this.modal.description = null
         this.getPins()
+        .then((data) => {
+          this.loading = false
+          this.board = data.data
+        })
+        .catch((err) => console.error(err))
       })
       .catch((err) => console.error(err))
     },
@@ -135,25 +145,39 @@ export default {
       this.$router.replace(`/pins/${pin._id}`)
     },
     getPins () {
-      user.getUserPinsForBoard(this.$route.params.board)
-      .then((data) => {
-        this.board = data.data
-      })
-      .catch((err) => console.error(err))
+      return user.getUserPinsForBoard(this.$route.params.board)
     },
     deletePinFromBoard (_id) {
+      this.loading = true
       user.deleteAPinFromABoard(_id)
       .then((data) => {
         this.getPins()
+        .then((data) => {
+          this.loading = false
+          this.board = data.data
+        })
+        .catch((err) => console.error(err))
+      })
+      .catch((err) => console.error(err))
+    },
+    fetchData () {
+      this.loading = true
+      this.getPins()
+      .then((data) => {
+        this.board = data.data
+        this.loading = false
       })
       .catch((err) => console.error(err))
     }
   },
-  mounted () {
-    this.getPins()
+  created () {
+    this.fetchData()
   },
   updated () {
     this.$redrawVueMasonry()
+  },
+  watch: {
+    '$route': 'fetchData'
   }
 }
 </script>
