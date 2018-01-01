@@ -11,7 +11,7 @@
 
     <div v-masonry transition-duration='0.3s' item-selector='.tile'>
 
-      <div v-masonry-tile md-with-hover class="tile">
+      <div v-masonry-tile class="tile">
           <md-card md-with-hover v-on:click.native="showCreateBoardDialog(true)" class="board-card">
             <md-card-header>
               <span class="md-subhead">Add new board</span>
@@ -26,7 +26,7 @@
           </md-card>
       </div>
 
-      <div v-if="userBoards" v-masonry-tile md-with-hover class="tile" v-for="board in userBoards" :key="board.title">
+      <div v-if="userBoards" v-masonry-tile class="tile" v-for="board in userBoards" :key="board.title">
         <md-card md-with-hover class="board">
           <md-ripple v-on:click.native="gotoBoard(board.title)">
             <md-card-header>

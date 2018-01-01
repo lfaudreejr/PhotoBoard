@@ -1,6 +1,6 @@
 import * as express from 'express'
 import * as path from 'path'
-// import * as favicon from 'serve-favicon'
+import * as favicon from 'serve-favicon'
 import * as logger from 'morgan'
 import * as cookieParser from 'cookie-parser'
 import * as bodyParser from 'body-parser'
@@ -30,7 +30,7 @@ if (process.env.NODE_ENV === 'development') {
   });
 }
 // uncomment after placing your favicon in /public
-// app.use(favicon(path.join(__dirname, '../public/favicon.ico')));
+app.use(favicon(path.join(__dirname, '../public/images/favicon.ico')));
 app.use(helmet());
 app.use(compression());
 app.use(logger('dev'));
