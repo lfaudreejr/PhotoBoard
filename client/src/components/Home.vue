@@ -131,11 +131,13 @@ export default {
       this.loadPins()
       .then((data) => {
         this.pins = data.data
-        if (user.currentUser()) {
-          user.getUserBoards().then((data) => {
-            this.currentBoards = data.data
-          }).catch((err) => console.error(err))
-        }
+        setTimeout(() => {
+          if (user.currentUser()) {
+            user.getUserBoards().then((data) => {
+              this.currentBoards = data.data
+            }).catch((err) => console.error(err))
+          }
+        }, 2000)
         this.loading = false
       })
       .catch((err) => console.error(err))
