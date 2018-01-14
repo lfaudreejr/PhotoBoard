@@ -1,4 +1,4 @@
 /// <reference types="express" />
-import { Request, Response } from 'express';
-export declare function getUser(req: Request, res: Response): void;
-export declare function createUser(req: Request, res: Response): void;
+import { Request, Response, NextFunction } from 'express';
+export declare function getUser(req: Request, res: Response, next: NextFunction): void;
+export declare function createUser(req: Request, res: Response, next: NextFunction): void;

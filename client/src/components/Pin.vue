@@ -1,5 +1,8 @@
 <template>
   <div class="md-layout md-gutter">
+    <div v-if="loading">
+      <md-progress-bar md-mode="query" class="md-accent"></md-progress-bar>
+    </div>
     <div class="md-layout-item md-size-50 md-xsmall-size-100 md-alignment-top-space-around">
       <md-card v-if="pin">
         <md-card-media>
@@ -93,6 +96,7 @@ export default {
   props: ['authenticated'],
   data () {
     return {
+      loading: false,
       pin: null,
       editPinModalControl: false,
       savePinModalControl: false,
@@ -149,16 +153,36 @@ export default {
       })
     },
     submitPinEdit () {
+      this.loading = true
       user.updateAPin(this.$route.params.id, this.editPinDescription)
-      this.getPinData()
+      .then(() => {
+        this.getPinData()
+        .then((data) => {
+          this.loading = false
+          this.pin = data.data
+        })
+        .catch((err) => console.error(err))
+      })
+      .catch((err) => console.error(err))
       this.showEditPinModal(false)
     },
     getPinData () {
-      user.getAPinById(this.$route.params.id)
+      return user.getAPinById(this.$route.params.id)
+    },
+    fetchData () {
+      this.loading = true
+      this.getPinData()
       .then((data) => {
         this.pin = data.data
+        if (user.currentUser()) {
+          user.getUserBoards()
+          .then((data) => {
+            this.currentBoards = data.data
+          })
+          .catch((err) => console.err(err))
+        }
+        this.loading = false
       })
-      .catch((err) => console.error(err))
     }
   },
   computed: {
@@ -166,13 +190,8 @@ export default {
       return user.currentUser()
     }
   },
-  mounted () {
-    this.getPinData()
-    if (user.currentUser()) {
-      user.getUserBoards().then((data) => {
-        this.currentBoards = data.data
-      })
-    }
+  created () {
+    this.fetchData()
   }
 }
 </script>

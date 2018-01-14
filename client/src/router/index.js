@@ -8,6 +8,8 @@ import Board from '@/components/Board'
 import FourOhFour from '@/components/FourOhFour'
 import Pin from '@/components/Pin'
 
+import { getUserProfile } from '../core/user-funcs'
+
 Vue.use(Router)
 
 export default new Router({
@@ -32,6 +34,12 @@ export default new Router({
       path: '/:id/dashboard',
       name: 'Dashboard',
       component: Dashboard,
+      beforeEnter: (to, from, next) => {
+        if (getUserProfile() !== to.params.id) {
+          next('/')
+        }
+        next()
+      },
       children: [
         {
           path: 'profile',

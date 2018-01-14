@@ -1,36 +1,36 @@
-import { Response, Request } from 'express'
+import { Response, Request, NextFunction } from 'express'
 
 import { savePin, getPins, getAPin, deletePinFromPins, deletePinFromUserBoard, updateAPin } from './pin-funcs'
 import { addPinToBoard } from '../boards/board-funcs'
 
-export function createPin (req: Request, res: Response) {
+export function createPin (req: Request, res: Response, next: NextFunction) {
   savePin({ url: req.body.pin.url, description: req.body.pin.description, uploaded_by: req.body.pin.uploaded_by, saved_by: req.body.pin.saved_by })
   .then((data) => {
     addPinToBoard(data.ops[0]._id, req.body.board._id)
     .then((data) => res.json(data))
-    .catch((err) => res.status(500).json(err))
+    .catch((err) => next(err))
   })
-  .catch((err) => res.status(500).json(err.message))
+  .catch((err) => next(err))
 }
 
-export function getAllPins (req: Request, res: Response) {
+export function getAllPins (req: Request, res: Response, next: NextFunction) {
   getPins()
   .then((data) => res.json(data))
-  .catch((err) => res.status(500).json(err.message))
+  .catch((err) => next(err))
 }
 
-export function getPin (req: Request, res: Response) {
+export function getPin (req: Request, res: Response, next: NextFunction) {
   getAPin(req.params.id)
   .then((data) => res.json(data))
-  .catch((err) => res.status(500).json(err.message))
+  .catch((err) => next(err))
 }
 
-export function deleteAPin (req: Request, res: Response) {
-  Promise.all([deletePinFromPins(req.params.id), deletePinFromUserBoard(req.headers.profile, req.params.id) ]).then((data) => res.json(data)).catch((err) => res.status(500).json(err.message))
+export function deleteAPin (req: Request, res: Response, next: NextFunction) {
+  Promise.all([deletePinFromPins(req.params.id), deletePinFromUserBoard(req.headers.profile, req.params.id) ]).then((data) => res.json(data)).catch((err) => next(err))
 }
 
-export function updatePin (req: Request, res: Response) {
+export function updatePin (req: Request, res: Response, next: NextFunction) {
   updateAPin(req.params.id, req.body.description)
   .then((data) => res.json(data))
-  .catch((err) => res.status(500).json(err.message))
+  .catch((err) => next(err))
 }

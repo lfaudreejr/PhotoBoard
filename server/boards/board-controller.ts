@@ -1,7 +1,7 @@
-import { Response, Request } from 'express'
+import { Response, Request, NextFunction } from 'express'
 import { getABoardByTitleAndOwner, saveBoard, getBoardPins, editBoard, deleteABoard } from '../boards/board-funcs'
 
-export function createBoard (req: Request, res: Response) {
+export function createBoard (req: Request, res: Response, next: NextFunction) {
   saveBoard({
     title: req.body.title,
     pins: [],
@@ -11,10 +11,10 @@ export function createBoard (req: Request, res: Response) {
     const { ops }: any = data
     return res.json(ops[0])
   })
-  .catch((err) => res.status(500).json(err.message))
+  .catch((err) => next(err))
 }
 
-export function getBoard (req: Request, res: Response) {
+export function getBoard (req: Request, res: Response, next: NextFunction) {
   getABoardByTitleAndOwner(req.params.name, req.headers.profile)
   .then((data) => {
     /**
@@ -38,19 +38,19 @@ export function getBoard (req: Request, res: Response) {
        */
       return res.json(data)
     })
-    .catch((err) => res.status(500).json(err.message))
+    .catch((err) => next(err))
   })
-  .catch((err) => res.status(500).json(err.message))
+  .catch((err) => next(err))
 }
 
-export function updateBoard (req: Request, res: Response) {
+export function updateBoard (req: Request, res: Response, next: NextFunction) {
   editBoard({ title: req.params.name }, { $set: { title: req.body.title } })
   .then((data) => res.json(data))
-  .catch((err) => res.status(500).json(err.message))
+  .catch((err) => next(err))
 }
-export function deleteBoard (req: Request, res: Response) {
+export function deleteBoard (req: Request, res: Response, next: NextFunction) {
   console.log('request', req.params)
   deleteABoard(req.params.id)
   .then((data) => res.json(data))
-  .catch((err) => res.status(500).json(err))
+  .catch((err) => next(err))
 }

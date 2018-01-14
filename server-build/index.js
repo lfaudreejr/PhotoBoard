@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const path = require("path");
+const favicon = require("serve-favicon");
 const logger = require("morgan");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
@@ -17,6 +18,7 @@ if (process.env.NODE_ENV === 'development') {
         next();
     });
 }
+app.use(favicon(path.join(__dirname, '../public/images/favicon.ico')));
 app.use(helmet());
 app.use(compression());
 app.use(logger('dev'));
