@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const board_funcs_1 = require("../boards/board-funcs");
-function createBoard(req, res) {
+function createBoard(req, res, next) {
     board_funcs_1.saveBoard({
         title: req.body.title,
         pins: [],
@@ -11,10 +11,10 @@ function createBoard(req, res) {
         const { ops } = data;
         return res.json(ops[0]);
     })
-        .catch((err) => res.status(500).json(err.message));
+        .catch((err) => next(err));
 }
 exports.createBoard = createBoard;
-function getBoard(req, res) {
+function getBoard(req, res, next) {
     board_funcs_1.getABoardByTitleAndOwner(req.params.name, req.headers.profile)
         .then((data) => {
         let pinsPromises = [];
@@ -26,21 +26,21 @@ function getBoard(req, res) {
             data.pins = pinsData;
             return res.json(data);
         })
-            .catch((err) => res.status(500).json(err.message));
+            .catch((err) => next(err));
     })
-        .catch((err) => res.status(500).json(err.message));
+        .catch((err) => next(err));
 }
 exports.getBoard = getBoard;
-function updateBoard(req, res) {
+function updateBoard(req, res, next) {
     board_funcs_1.editBoard({ title: req.params.name }, { $set: { title: req.body.title } })
         .then((data) => res.json(data))
-        .catch((err) => res.status(500).json(err.message));
+        .catch((err) => next(err));
 }
 exports.updateBoard = updateBoard;
-function deleteBoard(req, res) {
+function deleteBoard(req, res, next) {
     console.log('request', req.params);
     board_funcs_1.deleteABoard(req.params.id)
         .then((data) => res.json(data))
-        .catch((err) => res.status(500).json(err));
+        .catch((err) => next(err));
 }
 exports.deleteBoard = deleteBoard;
