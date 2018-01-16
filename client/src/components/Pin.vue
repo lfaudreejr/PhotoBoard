@@ -10,11 +10,11 @@
         </md-card-media>
         <md-card-area>
           <md-card-content>
-            {{pin.description}}
+            <h3>{{pin.description}}</h3>
           </md-card-content>
           <!-- show if current pin owner -->
           <md-card-actions v-if="currentUser === pin.saved_by">
-            <md-button class="md-icon-button" @click="showConfirmDeletePinModal(true)">
+            <md-button class="md-icon-button md-accent" @click="showConfirmDeletePinModal(true)">
               <md-icon>delete</md-icon>
             </md-button>
                 <!-- Show modal to confirm delete of pin -->
@@ -39,6 +39,9 @@
           </md-card-actions>
         </md-card-area>
       </md-card>
+      <!-- Comments Component -->
+      <comments :authenticated="authenticated" :pin="pin" :comments="comments"></comments>
+      <!-- -->
     </div>
     <!-- show modal to edit pin -->
     <md-dialog :md-active.sync="editPinModalControl" class="dialog">
@@ -50,8 +53,8 @@
         </md-field>
       </md-card-content>
       <md-dialog-actions>
-        <md-button @click="showEditPinModal(false)">Cancel</md-button>
-        <md-button @click="submitPinEdit()">Submit</md-button>
+        <md-button class="md-primary" @click="showEditPinModal(false)">Cancel</md-button>
+        <md-button class="md-primary" @click="submitPinEdit()">Submit</md-button>
       </md-dialog-actions>
     </md-dialog>
     <!-- show modal to add pin to user board if not already -->
@@ -90,11 +93,17 @@
 
 <script>
 import * as user from '../core/user-funcs.js'
+import Comments from './Comments'
 
 export default {
   name: 'pin',
   props: ['authenticated'],
+  components: { Comments },
   data () {
+    user.dataEmitter.on('commentChange', (data) => {
+      this.fetchData()
+      // this.$router.replace(`/pins/${this.pin._id}`)
+    })
     return {
       loading: false,
       pin: null,
@@ -104,7 +113,8 @@ export default {
       confirmDeletePinControl: false,
       createBoardTitle: null,
       currentBoards: null,
-      editPinDescription: null
+      editPinDescription: null,
+      comments: null
     }
   },
   methods: {
@@ -169,17 +179,33 @@ export default {
     getPinData () {
       return user.getAPinById(this.$route.params.id)
     },
+    getPinComments () {
+      let foundComments = []
+      console.log(this.pin)
+      if (this.pin && this.pin.comments) {
+        this.pin.comments.forEach(async (pin) => {
+          try {
+            let foundPin = await user.getCommentsToPin(pin._id)
+            foundComments.push(foundPin.data)
+          } catch (error) {
+            console.error(error)
+          }
+        })
+        this.comments = foundComments
+      }
+    },
     fetchData () {
       this.loading = true
       this.getPinData()
       .then((data) => {
         this.pin = data.data
+        this.getPinComments()
         if (user.currentUser()) {
           user.getUserBoards()
           .then((data) => {
             this.currentBoards = data.data
           })
-          .catch((err) => console.err(err))
+          .catch((err) => console.error(err))
         }
         this.loading = false
       })
@@ -192,6 +218,9 @@ export default {
   },
   created () {
     this.fetchData()
+  },
+  watch: {
+    '$route': 'fetchData'
   }
 }
 </script>

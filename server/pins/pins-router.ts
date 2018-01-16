@@ -1,7 +1,8 @@
 import { Router } from 'express'
+import jwtCheck from '../middleware/jwtCheck'
 
 import * as pins from './pins-controller'
-import jwtCheck from '../middleware/jwtCheck'
+import * as comments from './comments/comments-controller'
 
 const pinsRouter: Router = Router()
 
@@ -15,37 +16,35 @@ pinsRouter.post('/add', jwtCheck, pins.createPin)
  */
 pinsRouter.get('/all', pins.getAllPins)
 
-/**
- *  /:id route handler
- */
-pinsRouter.route('/:id')
-/**
+ /**
  * Get pin by id
  */
-  .get(pins.getPin)
+pinsRouter.get('/:id', pins.getPin)
 /**
  * Update a pin
  */
-  .put(jwtCheck, pins.updatePin)
+pinsRouter.put('/:id', jwtCheck, pins.updatePin)
 /**
  * Delete a pin
  */
-  .delete(jwtCheck, pins.deleteAPin)
+pinsRouter.delete('/:id', jwtCheck, pins.deleteAPin)
 
 /**
- * Update a pin
+ * Add comment to pin
  */
-// pinsRouter.put('/:id', jwtCheck, pins.updatePin)
+pinsRouter.post('/:id/comments', jwtCheck, comments.createComment)
+/**
+ * Get Comments for pin
+ */
+pinsRouter.get('/:id/comments/', comments.getComment)
+/**
+ * Update a comment on pin
+ */
+pinsRouter.put('/:id/comments/:comment')
 
 /**
- * Get pin by id
+ * Delete a comment to pin
  */
-// pinsRouter.get('/:id', pins.getPin)
-
-/**
- * Delete a pin
- */
-// pinsRouter.delete('/:id', jwtCheck, pins.deleteAPin)
-
+pinsRouter.delete('/:id/comments/:comment', jwtCheck, comments.deleteComment)
 
 export default pinsRouter

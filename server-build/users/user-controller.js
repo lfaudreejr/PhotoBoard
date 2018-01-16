@@ -10,7 +10,7 @@ function getUser(req, res, next) {
 exports.getUser = getUser;
 function createUser(req, res, next) {
     user_funcs_1.saveUser(req.body._id)
-        .then((data) => res.json(data))
+        .then((data) => res.json(data.ops[0]))
         .catch((err) => next(err));
 }
 exports.createUser = createUser;

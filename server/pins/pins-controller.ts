@@ -1,6 +1,6 @@
 import { Response, Request, NextFunction } from 'express'
 
-import { savePin, getPins, getAPin, deletePinFromPins, deletePinFromUserBoard, updateAPin } from './pin-funcs'
+import { savePin, getPins, getAPin, deletePinFromPins, deletePinFromUserBoard, updateAPinDescription } from './pin-funcs'
 import { addPinToBoard } from '../boards/board-funcs'
 
 export function createPin (req: Request, res: Response, next: NextFunction) {
@@ -30,7 +30,8 @@ export function deleteAPin (req: Request, res: Response, next: NextFunction) {
 }
 
 export function updatePin (req: Request, res: Response, next: NextFunction) {
-  updateAPin(req.params.id, req.body.description)
+  const { body } = req
+  updateAPinDescription(req.params.id, body)
   .then((data) => res.json(data))
   .catch((err) => next(err))
 }

@@ -44,7 +44,7 @@
             </md-card-content>
           </md-ripple>
           <md-button @click="openBoardEditModal(true), setEditBoard(board)">edit</md-button>
-          <md-button @click="openDeleteConfirmModal(true)">Delete</md-button>
+          <md-button class="md-accent" @click="openDeleteConfirmModal(true)">Delete</md-button>
         </md-card>
         <!-- Confirm Delete Board MODAL -->
         <md-dialog-confirm
@@ -72,8 +72,8 @@
 
         <md-divider></md-divider>
         <md-dialog-actions>
-          <md-button @click="showCreateBoardDialog(false),modal.boardName=''">Cancel</md-button>
-          <md-button @click="createBoard()">Create</md-button>
+          <md-button class="md-primary" @click="showCreateBoardDialog(false),modal.boardName=''">Cancel</md-button>
+          <md-button class="md-primary" @click="createBoard()">Create</md-button>
         </md-dialog-actions>
       </div>
     </md-dialog>
@@ -88,8 +88,8 @@
         </md-field>
       </md-dialog-content>
       <md-dialog-actions>
-        <md-button @click="openBoardEditModal(false)">Cancel</md-button>
-        <md-button @click="submitBoardEdit()">Save</md-button>
+        <md-button class="md-primary" @click="openBoardEditModal(false)">Cancel</md-button>
+        <md-button class="md-primary" @click="submitBoardEdit()">Save</md-button>
       </md-dialog-actions>
     </md-dialog>
 
@@ -191,6 +191,7 @@ export default {
         this.loading = false
       })
       .catch((err) => console.error(err))
+      this.loading = false
     }
   },
   created () {

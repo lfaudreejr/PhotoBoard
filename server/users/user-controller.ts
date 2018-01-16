@@ -10,6 +10,6 @@ export function getUser (req: Request, res: Response, next: NextFunction) {
 
 export function createUser (req: Request, res: Response, next: NextFunction) {
   saveUser(req.body._id)
-  .then((data) => res.json(data))
+  .then((data) => res.json(data.ops[0]))
   .catch((err) => next(err))
 }
