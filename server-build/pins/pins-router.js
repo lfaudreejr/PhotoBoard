@@ -1,13 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const pins = require("./pins-controller");
 const jwtCheck_1 = require("../middleware/jwtCheck");
+const pins = require("./pins-controller");
+const comments = require("./comments/comments-controller");
 const pinsRouter = express_1.Router();
 pinsRouter.post('/add', jwtCheck_1.default, pins.createPin);
 pinsRouter.get('/all', pins.getAllPins);
-pinsRouter.route('/:id')
-    .get(pins.getPin)
-    .put(jwtCheck_1.default, pins.updatePin)
-    .delete(jwtCheck_1.default, pins.deleteAPin);
+pinsRouter.get('/:id', pins.getPin);
+pinsRouter.put('/:id', jwtCheck_1.default, pins.updatePin);
+pinsRouter.delete('/:id', jwtCheck_1.default, pins.deleteAPin);
+pinsRouter.post('/:id/comments', jwtCheck_1.default, comments.createComment);
+pinsRouter.get('/:id/comments/', comments.getComment);
+pinsRouter.put('/:id/comments/:comment');
+pinsRouter.delete('/:id/comments/:comment', jwtCheck_1.default, comments.deleteComment);
 exports.default = pinsRouter;

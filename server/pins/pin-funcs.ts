@@ -25,6 +25,6 @@ export function deletePinFromUserBoard (userId: string | string[], pinId: string
   return mongo.update({ owner: userId }, 'boards', { $pull: {pins: new ObjectID(pinId)} })
 }
 
-export function updateAPin (id: string, desc: string) {
-  return mongo.update({ _id: new ObjectID(id) }, 'pins', { $set: { description: desc } })
+export function updateAPinDescription (id: string, updateObj: object) {
+  return mongo.update({ _id: new ObjectID(id) }, 'pins', { $set: updateObj })
 }

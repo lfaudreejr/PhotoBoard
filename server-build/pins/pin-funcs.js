@@ -22,7 +22,7 @@ function deletePinFromUserBoard(userId, pinId) {
     return mongoService_1.default.update({ owner: userId }, 'boards', { $pull: { pins: new mongodb_1.ObjectID(pinId) } });
 }
 exports.deletePinFromUserBoard = deletePinFromUserBoard;
-function updateAPin(id, desc) {
-    return mongoService_1.default.update({ _id: new mongodb_1.ObjectID(id) }, 'pins', { $set: { description: desc } });
+function updateAPinDescription(id, updateObj) {
+    return mongoService_1.default.update({ _id: new mongodb_1.ObjectID(id) }, 'pins', { $set: updateObj });
 }
-exports.updateAPin = updateAPin;
+exports.updateAPinDescription = updateAPinDescription;

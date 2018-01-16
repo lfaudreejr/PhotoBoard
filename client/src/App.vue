@@ -1,6 +1,9 @@
 <template>
   <div id="app">
     <navbar :authenticated='authenticated'></navbar>
+    <div v-if="loading">
+      <md-progress-bar md-mode="indeterminate" class="md-accent"></md-progress-bar>
+    </div>
     <router-view :authenticated='authenticated' :currentUser="currentUser"></router-view>
   </div>
 </template>
@@ -23,8 +26,22 @@ export default {
     })
     return {
       authenticated,
-      currentUser
+      currentUser,
+      loading: false
     }
+  },
+  methods: {
+    beforeRouteRender (to, from, next) {
+      this.loading = true
+      next()
+    },
+    afterRouteRender () {
+      this.loading = false
+    }
+  },
+  created () {
+    this.$router.beforeEach(this.beforeRouteRender)
+    this.$router.afterEach(this.afterRouteRender)
   }
 }
 </script>
