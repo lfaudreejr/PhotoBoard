@@ -29,7 +29,8 @@ function deleteAPin(req, res, next) {
 }
 exports.deleteAPin = deleteAPin;
 function updatePin(req, res, next) {
-    pin_funcs_1.updateAPin(req.params.id, req.body.description)
+    const { body } = req;
+    pin_funcs_1.updateAPinDescription(req.params.id, body)
         .then((data) => res.json(data))
         .catch((err) => next(err));
 }
