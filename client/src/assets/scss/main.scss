@@ -10,6 +10,10 @@
 
 @import "~vue-material/dist/theme/all"; // Apply the theme
 
+.danger {
+  background-color: $danger-color
+}
+
 .profile {
   padding-left: 5%;
   padding-right: 5%;

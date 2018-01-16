@@ -35,7 +35,7 @@
             </md-card-media>
             <md-card-area>
               <md-card-actions>
-                <md-button class="md-icon-button" @click="showConfirmDeletePinModal(true)">
+                <md-button class="md-icon-button md-accent" @click="showConfirmDeletePinModal(true)">
                   <md-icon>delete</md-icon>
                 </md-button>
               <!-- Show modal to confirm delete of pin -->
@@ -76,8 +76,8 @@
 
         <md-divider></md-divider>
         <md-dialog-actions>
-          <md-button @click="showDialog(false),modal.boardName=''">Cancel</md-button>
-          <md-button @click="addPinToBoard()">Create</md-button>
+          <md-button class="md-primary" @click="showDialog(false),modal.boardName=''">Cancel</md-button>
+          <md-button class="md-primary" @click="addPinToBoard()">Create</md-button>
         </md-dialog-actions>
       </div>
     </md-dialog>

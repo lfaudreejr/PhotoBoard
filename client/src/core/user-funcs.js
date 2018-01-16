@@ -1,5 +1,7 @@
 import { get, put, post, destroy, getId, getProfile } from '../api'
+import EventEmitter from 'eventemitter3'
 
+export const dataEmitter = new EventEmitter()
 export const currentUser = () => getId()
 export const getUserProfile = () => getProfile()
 
@@ -56,4 +58,16 @@ export function updateABoard (board, update) {
 
 export function deleteABoard (id) {
   return destroy(`/api/boards/${id}`)
+}
+
+export function addCommentToPin (id, comment) {
+  return post(`/api/pins/${id}/comments`, comment)
+}
+
+export function getCommentsToPin (id) {
+  return get(`/api/pins/${id}/comments`)
+}
+
+export function deleteCommentsFromPin (id, commentId) {
+  return destroy(`/api/pins/${id}/comments/${commentId}`)
 }
