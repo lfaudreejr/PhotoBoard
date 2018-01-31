@@ -1,5 +1,5 @@
 <template>
-  <router-view :authenticated="authenticated"></router-view>
+  <router-view :authenticated="authenticated" :isAdmin="isAdmin"></router-view>
 </template>
 
 <script>
@@ -7,7 +7,7 @@ import Profile from './Profile'
 import Board from './Board'
 export default {
   name: 'Dashboard',
-  props: ['authenticated'],
+  props: ['authenticated', 'isAdmin'],
   components: { Profile, Board }
 }
 </script>

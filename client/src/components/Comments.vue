@@ -11,7 +11,7 @@
           <div class="md-list-item-text">
             <span>{{c.comment}}</span>
           </div>
-          <md-button v-if="currentUser === c.commentor"  class="md-icon-button md-accent" @click="showDeleteCommentConfirm(true)">
+          <md-button v-if="checkIfOwnerOrAdmin(currentUser,c.commentor)"  class="md-icon-button md-accent" @click="showDeleteCommentConfirm(true)">
             <md-icon>delete</md-icon>
           </md-button>
               <!-- Delete Confirm Modal -->
@@ -49,15 +49,17 @@
 
 <script>
 import * as user from '../core/user-funcs.js'
+import { checkIfOwnerOrAdmin } from '../authentication/AuthService.js'
 
 export default {
   name: 'comments',
-  props: [ 'pin', 'comments', 'authenticated' ],
+  props: [ 'pin', 'comments', 'authenticated', 'isAdmin' ],
   data () {
     return {
       comment: null,
       saveCommentModalControl: false,
-      showDeleteCommentModalControl: false
+      showDeleteCommentModalControl: false,
+      checkIfOwnerOrAdmin
     }
   },
   computed: {

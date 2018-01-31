@@ -13,7 +13,7 @@
             <h3>{{pin.description}}</h3>
           </md-card-content>
           <!-- show if current pin owner -->
-          <md-card-actions v-if="currentUser === pin.saved_by">
+          <md-card-actions v-if="checkIfOwnerOrAdmin(currentUser,pin.saved_by)">
             <md-button class="md-icon-button md-accent" @click="showConfirmDeletePinModal(true)">
               <md-icon>delete</md-icon>
             </md-button>
@@ -93,11 +93,12 @@
 
 <script>
 import * as user from '../core/user-funcs.js'
+import { checkIfOwnerOrAdmin } from '../authentication/AuthService.js'
 import Comments from './Comments'
 
 export default {
   name: 'pin',
-  props: ['authenticated'],
+  props: ['authenticated', 'isAdmin'],
   components: { Comments },
   data () {
     user.dataEmitter.on('commentChange', (data) => {
@@ -114,7 +115,8 @@ export default {
       createBoardTitle: null,
       currentBoards: null,
       editPinDescription: null,
-      comments: null
+      comments: null,
+      checkIfOwnerOrAdmin
     }
   },
   methods: {
@@ -181,7 +183,6 @@ export default {
     },
     getPinComments () {
       let foundComments = []
-      console.log(this.pin)
       if (this.pin && this.pin.comments) {
         this.pin.comments.forEach(async (pin) => {
           try {

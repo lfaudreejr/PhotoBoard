@@ -1,16 +1,17 @@
-import { get, put, post, destroy, getId, getProfile } from '../api'
+import { get, put, post, destroy } from '../api'
+import { getId, getUserNickname } from '../authentication/AuthService'
 import EventEmitter from 'eventemitter3'
 
 export const dataEmitter = new EventEmitter()
 export const currentUser = () => getId()
-export const getUserProfile = () => getProfile()
+export const getUserProfile = () => getUserNickname()
 
 export function createABoard (board) {
   return post('/api/boards', board)
 }
 
 export function getUserBoards () {
-  return get('/api/user/profile')
+  return get('/api/boards')
 }
 
 export async function getOneUserBoard (boardTitle) {
