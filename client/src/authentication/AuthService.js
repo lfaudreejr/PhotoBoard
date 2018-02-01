@@ -38,7 +38,6 @@ function setSession (authResult) {
 function getProfile (authResult) {
   getAuth().client.userInfo(authResult.accessToken, (err, user) => {
     if (err) console.log(err)
-    console.log(user)
     localStorage.setItem('id', JSON.stringify(user.sub))
     localStorage.setItem('nickname', JSON.stringify(user.nickname))
     localStorage.setItem('picture', JSON.stringify(user.picture))

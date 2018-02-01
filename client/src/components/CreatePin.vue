@@ -19,7 +19,7 @@
       </md-card>
     </div>
 
-    <!--  MODAL for Creating a Pin -->
+    <!--  MODAL for Creating a Pin via img link -->
     <md-dialog
       :md-active.sync="showLinkModalProp"
       class="dialog">
@@ -28,8 +28,8 @@
           <md-field md-clearable>
             <label for="pin-uri">Enter Image Url</label>
             <md-input
-              :disabled="fileAdded"
               name="pin-uri"
+              @input="$v.linkModal.url.$touch()"
               v-model="linkModal.url"/>
           </md-field>
           <md-field>
@@ -39,32 +39,32 @@
               v-model="linkModal.description"
             ></md-textarea>
           </md-field>
-        </md-dialog-content>
 
-        <md-divider></md-divider>
-        <md-dialog-actions>
-          <md-button
-            class="md-accent"
-            @click="showDropModal(true), showLinkModal(false)"
-          >
-            Upload An Image
-          </md-button>
-          <md-button
-            class="md-primary"
-            @click="showLinkModal(false)"
+          <md-divider></md-divider>
+          <md-dialog-actions>
+            <md-button
+              @click="showDropModal(true), showLinkModal(false)"
             >
-            Cancel
-          </md-button>
-          <md-button
-            class="md-primary"
-            @click="createPinByLink()"
-            >
-            Save Pin
-          </md-button>
-        </md-dialog-actions>
+              Upload An Image
+            </md-button>
+            <md-button
+              class="md-primary"
+              @click="showLinkModal(false)"
+              >
+              Cancel
+            </md-button>
+            <md-button
+              :disabled="$v.linkModal.url.$invalid"
+              class="md-primary"
+              @click="createPinByLink()"
+              >
+              Save Pin
+            </md-button>
+          </md-dialog-actions>
+        </md-dialog-content>
       </div>
     </md-dialog>
-
+    <!--  MODAL for Creating a Pin via img file drop -->
     <md-dialog
       :md-active.sync="showDropModalProp"
       class="modal">
@@ -76,10 +76,9 @@
           @vdropzone-file-added="vfileAdded"
           >
         </vue-dropzone>
-      </md-dialog-content>
+
         <md-dialog-actions>
           <md-button
-            class="md-accent"
             @click="showDropModal(false), showLinkModal(true)"
           >
             Link Image
@@ -97,12 +96,14 @@
             Save Pin
           </md-button>
         </md-dialog-actions>
+      </md-dialog-content>
     </md-dialog>
   </div>
 </template>
 
 <script>
 import vue2Dropzone from 'vue2-dropzone'
+import { required, url } from 'vuelidate/lib/validators'
 import * as user from '../core/user-funcs.js'
 
 export default {
@@ -137,6 +138,14 @@ export default {
         }
       },
       fileAdded: false
+    }
+  },
+  validations: {
+    linkModal: {
+      url: {
+        required,
+        url
+      }
     }
   },
   computed: {},
