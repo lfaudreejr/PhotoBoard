@@ -1,4 +1,6 @@
 import * as mongodb from 'mongodb'
+import { MongoCallback, InsertOneWriteOpResult } from 'mongodb'
+
 
 const MongoClient = mongodb.MongoClient
 const DATABASE = process.env.DATABASE
@@ -25,7 +27,7 @@ function getMongoConnection(): Promise<mongodb.Db> {
   })
 }
 
-function create(obj: object, collectionName: string) {
+function create(obj: object, collectionName: string): Promise<void | InsertOneWriteOpResult> {
   return getMongoConnection().then((db) => {
     const collection = db.collection(collectionName)
     return collection.insertOne(obj).then((data) => {

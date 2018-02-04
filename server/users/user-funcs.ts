@@ -1,7 +1,7 @@
 import {default as mongo} from '../services/mongoService'
 import { InsertOneWriteOpResult } from 'mongodb';
 
-export function saveUser (user): Promise<void | InsertOneWriteOpResult> {
+export function saveUser (user) {
   return mongo.create({ _id: user }, 'users')
 }
 

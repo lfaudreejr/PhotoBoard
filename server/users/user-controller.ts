@@ -10,7 +10,7 @@ export function createUser (req: Request, res: Response, next: NextFunction) {
         return returnJSONResponse({ message: "User exists" }, res)
       } else {
         return saveUser(_id)
-        .then((data) => returnJSONResponse(data.ops[0], res))
+        .then((data: any) => returnJSONResponse(data.ops[0], res))
         .catch((err) => handleError(err, next))
       }
     })
