@@ -1,18 +1,18 @@
 language: node_js
 node_js:
-- lts/*
+  - lts/*
 cache:
   directories:
   - node_modules
 before_install:
--- openssl aes-256-cbc -K $encrypted_8ccd6defe5da_key -iv         $encrypted_8ccd6defe5da_iv
-- in index.js.enc -out ./client/src/config/index.js -d
-- npm install -g typescript
+  -- openssl aes-256-cbc -K $encrypted_8ccd6defe5da_key -iv         $encrypted_8ccd6defe5da_iv
+  - in index.js.enc -out ./client/src/config/index.js -d
+  - npm install -g typescript
 before_script:
-- npm install
-- npm run setup
-- npm run build:client
-- npm run build:server
+  - npm install
+  - npm run setup
+  - npm run build:client
+  - npm run build:server
 deploy:
   provider: heroku
   api_key:
