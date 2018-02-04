@@ -1,18 +1,16 @@
 language: node_js
 node_js:
-  - lts/*
+- lts/*
 cache:
   directories:
   - node_modules
 before_install:
-  - openssl aes-256-cbc -K $encrypted_8ccd6defe5da_key -iv $encrypted_8ccd6defe5da_iv
-  -in index.js.enc -out ./client/src/config/index.js -d
-  - npm install -g typescript
+- npm install -g typescript
 before_script:
-  - npm install
-  - npm run setup
-  - npm run build:client
-  - npm run build:server
+- npm install
+- npm run setup
+- npm run build:client
+- npm run build:server
 deploy:
   provider: heroku
   api_key:
@@ -20,3 +18,6 @@ deploy:
   app: photoboard
   on:
     repo: lfaudreejr/PhotoBoard
+env:
+  global:
+    secure: OsOCkTqmwM8hJ3EuVREvXpfJN5FEL0hinXlCCuCicTJGUb5WcXR7FptcGo33W0lcsd9TSIdUBQ3ZQ+Mqq1vtOAJSJIrCe45GxitA430mHrDlc3QcGYx7ewIbj2I6O0Sbl2uqDmkGI7xsudkmD49w2S0QDZklIFw4KtPLrQzFLgos9p0rSkA5xWz+0HAHLZGUTfiFlyDa6HT5wB5gVzfgVA1MorKc2VWE9ypd4zZkk1ekZa6aWUFf5hkKlGEYskysdulI8sAoVUFZsNI30pAlxi//HtgzaMamXhQO12zphMvcekMM3AyCNDV8XeBFmGE4wVRruOGJiDwZEaW5NLKP3K1SNHpz75TE51zbpM9gzqWv0C7gcdIJFfGAUxlw0Ovz1yl0p6XtSxRXuUvnIIBYqzQZYe/VYB7dtzXWqv0qHqa95BI0t9BLYyN5wJrsqhArKJyrqPPQl/QicMm5KXEg7ZQ3EF1dUnvL3qF9V2sShZb9xp1/+TIaUNdsGBJbVOvfCMaWY0lea/R6J+sfirEHZC3RRwbAM3al15mFn8ZACS0it44AaNKq8WFoC8XsG8MzdxpqggHRX/QwO7jlYCr0zJx3I3ChGQA+lq0b0cmmPmEVudehgBlspFRsacuip64H7+Nh499Z0fybkMWRdT5VzNW3LaPanOTntKyO9XCfljs=
