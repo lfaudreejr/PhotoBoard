@@ -13,8 +13,7 @@
 </template>
 
 <script>
-import { getProfile } from '../api'
-import {login, logout} from '../authentication/AuthService.js'
+import {login, logout, getUserNickname} from '../authentication/AuthService.js'
 
 export default {
   name: 'navbar',
@@ -27,7 +26,7 @@ export default {
     login,
     logout,
     gotoProfile () {
-      this.$router.push({name: 'Profile', params: { id: getProfile() }})
+      this.$router.push({name: 'Profile', params: { id: getUserNickname() }})
     }
   }
 }

@@ -1,17 +1,8 @@
 import axios from 'axios'
+import { getId } from '../authentication/AuthService'
 
 export const getToken = () => {
   return localStorage.getItem('access_token')
-}
-
-export const getProfile = () => {
-  const username = JSON.parse(localStorage.getItem('profile'))
-  if (username) return username.name
-  else return null
-}
-
-export const getId = () => {
-  return JSON.parse(localStorage.getItem('id'))
 }
 
 /**

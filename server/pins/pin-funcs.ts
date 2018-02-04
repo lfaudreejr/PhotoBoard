@@ -5,7 +5,7 @@ import {
   FindAndModifyWriteOpResultObject 
 } from 'mongodb';
 
-export function savePin (pin: object): Promise<InsertOneWriteOpResult> {
+export function savePin (pin: object): Promise<void | InsertOneWriteOpResult> {
   return mongo.create(pin, 'pins')
 }
 
@@ -17,7 +17,7 @@ export function getAPin (id: string) {
   return mongo.readOne({ _id: new ObjectID(id) }, 'pins')
 }
 
-export function deletePinFromPins (id: string): Promise<FindAndModifyWriteOpResultObject> {
+export function deletePinFromPins (id: string): Promise<void | FindAndModifyWriteOpResultObject<any>> {
   return mongo.destroy({ _id: new ObjectID(id) }, 'pins')
 }
 

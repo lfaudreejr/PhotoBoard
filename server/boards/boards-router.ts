@@ -24,5 +24,9 @@ boardRouter.put('/:name', jwtCheck, board.updateBoard)
  */
 boardRouter.delete('/:id', jwtCheck, board.deleteBoard)
 
+/**
+ * Get all boards for a user
+ */
+boardRouter.get('/', jwtCheck, board.getBoardsForUser)
 
 export default boardRouter

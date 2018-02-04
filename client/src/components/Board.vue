@@ -12,20 +12,7 @@
 
     <div v-masonry transition-duration='0.3s' item-selector='.tile'>
 
-      <div v-masonry-tile class="tile">
-        <md-card md-with-hover class="board-card" v-on:click.native="showDialog(true)">
-          <md-ripple>
-            <md-card-header>
-              <span class="md-subhead">Add new pin</span>
-            </md-card-header>
-            <md-card-content>
-              <md-button class="md-icon-button board-button">
-                <md-icon>add</md-icon>
-              </md-button>
-            </md-card-content>
-          </md-ripple>
-        </md-card>
-      </div>
+      <CreatePin :board="board"></CreatePin>
 
       <div v-masonry-tile class="tile" v-for="pin in boardPins" :key="pin._id">
         <md-card>
@@ -59,37 +46,20 @@
 
     </div>
     <!-- </div> -->
-
-        <!--  MODAL for Creating a Pin -->
-    <md-dialog :md-active.sync="showDialogProp" class="dialog">
-      <div>
-        <md-dialog-title>Add Pin</md-dialog-title>
-
-        <md-field md-clearable>
-          <label for="pin-uri">Enter Url</label>
-          <md-input name="pin-uri" v-model="modal.url"/>
-        </md-field>
-        <md-field>
-          <label for="pin-description">Enter a description</label>
-          <md-textarea name="pin-description" v-model="modal.description"></md-textarea>
-        </md-field>
-
-        <md-divider></md-divider>
-        <md-dialog-actions>
-          <md-button class="md-primary" @click="showDialog(false),modal.boardName=''">Cancel</md-button>
-          <md-button class="md-primary" @click="addPinToBoard()">Create</md-button>
-        </md-dialog-actions>
-      </div>
-    </md-dialog>
   </div>
 </template>
 
 <script>
+import CreatePin from '@/components/CreatePin'
 import * as user from '../core/user-funcs.js'
 
 export default {
   name: 'board',
+  components: {
+    CreatePin
+  },
   data () {
+    user.dataEmitter.on('pinSaved', this.fetchData)
     return {
       loading: false,
       showDialogProp: false,
@@ -115,31 +85,6 @@ export default {
     },
     showConfirmDeletePinModal (method) {
       this.confirmDeletePinControl = method
-    },
-    addPinToBoard () {
-      this.showDialog(false)
-      this.loading = true
-      const pin = {
-        url: this.modal.url,
-        description: this.modal.description,
-        uploaded_by: user.currentUser(),
-        saved_by: user.currentUser()
-      }
-      const board = {
-        _id: this.board._id
-      }
-      user.addPinToUserBoard(pin, board)
-      .then((data) => {
-        this.modal.url = null
-        this.modal.description = null
-        this.getPins()
-        .then((data) => {
-          this.loading = false
-          this.board = data.data
-        })
-        .catch((err) => console.error(err))
-      })
-      .catch((err) => console.error(err))
     },
     gotoPin (pin) {
       this.$router.replace(`/pins/${pin._id}`)

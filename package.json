@@ -7,11 +7,14 @@
     "prod:test": "NODE_ENV=production npm run start",
     "debug": "DEBUG=photoboard:* npm run build:live",
     "dev": "NODE_ENV=development concurrently \"npm run dev:client\" \"npm run debug\"",
-    "build": "npm run build:server && npm run build:client",
+    "build": "NODE_ENV=production npm run build:server && npm run build:client",
     "dev:client": "cd client && npm run dev",
-    "build:live": "nodemon --exec ./node_modules/.bin/ts-node -- ./server/bin/index.ts",
-    "build:server": "cd server && tsc",
-    "build:client": "cd client && npm run build"
+    "build:live": "PORT=3000 nodemon --exec ./node_modules/.bin/ts-node -- ./server/bin/index.ts",
+    "build:server": "NODE_ENV=production cd server && tsc",
+    "build:client": "NODE_ENV=production cd client && npm run build",
+    "stop": "pm2 stop all",
+    "kill": "pm2 kill",
+    "setup": "cd client && npm install"
   },
   "dependencies": {
     "body-parser": "~1.18.2",

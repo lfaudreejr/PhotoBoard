@@ -117,10 +117,10 @@ export default {
   },
   computed: {
     username () {
-      return JSON.parse(localStorage.getItem('profile')).name
+      return JSON.parse(localStorage.getItem('nickname'))
     },
     picture () {
-      return JSON.parse(localStorage.getItem('profile')).picture
+      return JSON.parse(localStorage.getItem('picture'))
     },
     userBoards () {
       return this.boards

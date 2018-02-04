@@ -7,9 +7,14 @@ import VueMaterial from 'vue-material'
 import {VueMasonryPlugin} from 'vue-masonry'
 import 'vue-material/dist/vue-material.min.css'
 import './assets/scss/main.scss'
+import vue2Dropzone from 'vue2-dropzone'
+import 'vue2-dropzone/dist/vue2Dropzone.css'
+import Vuelidate from 'vuelidate'
 
+Vue.use(Vuelidate)
 Vue.use(VueMaterial)
 Vue.use(VueMasonryPlugin)
+Vue.use(vue2Dropzone)
 
 Vue.config.productionTip = false
 

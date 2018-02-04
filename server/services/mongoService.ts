@@ -1,4 +1,6 @@
 import * as mongodb from 'mongodb'
+import { MongoCallback, InsertOneWriteOpResult } from 'mongodb'
+
 
 const MongoClient = mongodb.MongoClient
 const DATABASE = process.env.DATABASE
@@ -25,17 +27,13 @@ function getMongoConnection(): Promise<mongodb.Db> {
   })
 }
 
-function create(obj: object, collectionName: string) {
+function create(obj: object, collectionName: string): Promise<void | InsertOneWriteOpResult> {
   return getMongoConnection().then((db) => {
     const collection = db.collection(collectionName)
     return collection.insertOne(obj).then((data) => {
       return data
-    }).catch((err) => {
-      throw new Error(err)
-    })
-  }).catch((err) => {
-    throw new Error(err)
-  })
+    }).catch(throwError)
+  }).catch(throwError)
 }
 
 function readAll(obj, collectionName, params = {}) {
@@ -47,18 +45,14 @@ function readAll(obj, collectionName, params = {}) {
         return resolve(docs)
       })
     })
-  }).catch((err) => {
-    throw new Error(err)
-  })
+  }).catch(throwError)
 }
 
 function update(obj, collectionName, config) {
   return getMongoConnection().then((db) => {
     const collection = db.collection(collectionName)
     return collection.findOneAndUpdate(obj, config, { returnOriginal: false })
-  }).catch((err) => {
-    throw new Error(err)
-  })
+  }).catch(throwError)
 }
 
 function destroy(obj, collectionName) {
@@ -67,12 +61,8 @@ function destroy(obj, collectionName) {
     return collection.findOneAndDelete(obj).then((doc) => {
       if (doc) return doc
       else return null
-    }).catch((err) => {
-      throw new Error(err)
-    })
-  }).catch((err) => {
-    throw new Error(err)
-  })
+    }).catch(throwError)
+  }).catch(throwError)
 }
 
 function readOne(obj, collectionName, options = {}) {
@@ -81,12 +71,12 @@ function readOne(obj, collectionName, options = {}) {
     return collection.findOne(obj, options).then((doc) => {
       if (doc) return doc
       else return null
-    }).catch((err) => {
-      throw new Error(err)
-    })
-  }).catch((err) => {
-    throw new Error(err)
-  })
+    }).catch(throwError)
+  }).catch(throwError)
+}
+
+function throwError (err) {
+  throw new Error(err)
 }
 
 export default {

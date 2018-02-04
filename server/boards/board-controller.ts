@@ -1,5 +1,14 @@
 import { Response, Request, NextFunction } from 'express'
-import { getABoardByTitleAndOwner, saveBoard, getBoardPins, editBoard, deleteABoard } from '../boards/board-funcs'
+import { returnJSONResponse, handleError } from '../helpers'
+
+import { 
+  getABoardByTitleAndOwner,
+  saveBoard, 
+  getBoardPins, 
+  editBoard, 
+  deleteABoard, 
+  getAllBoardsByOwner
+} from '../boards/board-funcs'
 
 export function createBoard (req: Request, res: Response, next: NextFunction) {
   saveBoard({
@@ -11,7 +20,7 @@ export function createBoard (req: Request, res: Response, next: NextFunction) {
     const { ops }: any = data
     return res.json(ops[0])
   })
-  .catch((err) => next(err))
+  .catch((err) => handleError(err, next))
 }
 
 export function getBoard (req: Request, res: Response, next: NextFunction) {
@@ -36,21 +45,27 @@ export function getBoard (req: Request, res: Response, next: NextFunction) {
       /**
        * Return new board
        */
-      return res.json(data)
+      return returnJSONResponse(data, res)
     })
-    .catch((err) => next(err))
+    .catch((err) => handleError(err, next))
   })
-  .catch((err) => next(err))
+  .catch((err) => handleError(err, next))
 }
 
 export function updateBoard (req: Request, res: Response, next: NextFunction) {
   editBoard({ title: req.params.name }, { $set: { title: req.body.title } })
-  .then((data) => res.json(data))
-  .catch((err) => next(err))
+  .then((data) => returnJSONResponse(data, res))
+  .catch((err) => handleError(err, next))
 }
 export function deleteBoard (req: Request, res: Response, next: NextFunction) {
   console.log('request', req.params)
   deleteABoard(req.params.id)
-  .then((data) => res.json(data))
-  .catch((err) => next(err))
+  .then((data) => returnJSONResponse(data, res))
+  .catch((err) => handleError(err, next))
+}
+
+export function getBoardsForUser (req: Request, res: Response, next: NextFunction) {
+  getAllBoardsByOwner(req.headers.profile)
+  .then((data) => returnJSONResponse(data, res))
+  .catch((err) => handleError(err, next))
 }

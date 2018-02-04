@@ -5,10 +5,7 @@ export let userBoards
 
 function loadUsersBoards () {
   funcs.getUserBoards()
-  .then((data) => {
-    userBoards = data.data
-    return userBoards
-  })
+  .then((data) => data.data)
   .catch((err) => console.error(err))
 }
 
