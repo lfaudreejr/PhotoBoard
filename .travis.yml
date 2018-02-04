@@ -4,6 +4,8 @@ node_js:
 cache:
   directories:
   - node_modules
+env:
+  - NODE_ENV=production
 before_install:
 - openssl aes-256-cbc -K $encrypted_8ccd6defe5da_key -iv $encrypted_8ccd6defe5da_iv
   -in index.js.enc -out ./client/src/config/index.js -d
