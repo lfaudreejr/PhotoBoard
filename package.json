@@ -13,7 +13,8 @@
     "build:server": "NODE_ENV=production cd server && tsc",
     "build:client": "NODE_ENV=production cd client && npm run build",
     "stop": "pm2 stop all",
-    "kill": "pm2 kill"
+    "kill": "pm2 kill",
+    "setup": "cd client && npm install"
   },
   "dependencies": {
     "body-parser": "~1.18.2",

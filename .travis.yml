@@ -9,6 +9,7 @@ before_install:
   -in index.js.enc -out ./client/src/config/index.js -d
 before_script:
   - npm install
+  - npm run setup
   - npm run build:client
   - npm run build:server
 deploy:
