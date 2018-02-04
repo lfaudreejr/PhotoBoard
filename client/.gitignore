@@ -6,6 +6,7 @@ yarn-error.log*
 bower_components/
 
 config/
+dist/
 
 # Editor directories and files
 .idea

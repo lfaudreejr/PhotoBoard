@@ -1,15 +1,19 @@
 language: node_js
 node_js:
 - iojs
-- '8'
 cache:
   directories:
   - node_modules
 before_install:
 - openssl aes-256-cbc -K $encrypted_8ccd6defe5da_key -iv $encrypted_8ccd6defe5da_iv
   -in index.js.enc -out ./client/src/config/index.js -d
+before_script:
+  - npm install
+  - npm run build:client
+  - npm run build:server
 deploy:
   provider: heroku
+  skip_cleanup: true
   api_key:
     secure: iIJr0jFydPZ/AJO17Bg7FBHjL3Q/RdPscQK7PFMkWfZfMtEeJTRFbYx+epzpnLeot/zTy8gucb/VoXsQ/Rx3dvce+VFt57IGjIZ+5zES79GaL8sArIzJ15nEvMqv2LV8K2xcvmp8CTQrjg4tW23OvLM78+C5kthBF+BvQtufOMwwWza/OoSJGC8hFDr6+atbmkEpkGtYKlQvLhGOwBH7ZU3eQpGUXGduinPpOUPn1/IhGoD/ywEaVVO8NRtVKUWjBShfPbo09B8KYuilXFMpGFjzEn4TYFEoMSEJYkocmDB6fTxPMl0k8ZtZvtJfaxotpWz3XN+W8+2GZUFvwfTazHUY0v9r5XVIIGpx+Bzo99NTt0Mbt+V0HqXF266ueseq/EjThWBQBTU+C+a77TUVeHuv/WJvju7BBp4h8R4Wbjc8YAtMgfzujQDGAXE+GwXOrzf1mbTQISqqIRwgjZSx8lD3Mm9oz0T+ZytoHBJKuXK9pmea4fh7jer8oOPjKgufvUuRMf2D6vdo7rgW83nM8doVllMFrdtT2sdr68kCcip0x349NfGmNC6EV2JnmywDYim5eDoyzzJHVKf3kWwJFsPaJP0kxwR3CedI9hK67FfkrClJbQ4x4plCi0JZqtl3VgFsFPtfUiUUaUcBNGm5995ddZE3loFopngM6hyavuA=
   app: photoboard

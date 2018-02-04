@@ -10,10 +10,7 @@ import * as helmet from 'helmet'
  * Api Route handlers
  */
 import apiRouter from './router/'
-/** 
- * Debug logging
-*/
-require('debug')('photoboard:server')
+
 /** 
  * Instantiate the Express app
 */
