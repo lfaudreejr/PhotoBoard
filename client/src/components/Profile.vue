@@ -4,10 +4,10 @@
       <md-progress-bar md-mode="query" class="md-accent"></md-progress-bar>
     </div>
     <div class="md-layout md-gutter md-alignment-top-center">
-      <div class="md-layout-item md-size-70">
+      <div class="md-layout-item md-medium-size-70 md-small-size-75 md-xsmall-size-85">
         <p class="md-display-1">{{username}}</p>
       </div>
-      <div class="md-layout-item">
+      <div class="md-layout-item md-medium-size-30 md-small-size-25 md-xsmall-size-15">
         <img class="user-picture" :src="picture">
       </div>
     </div>
@@ -98,6 +98,7 @@
 
 <script>
 import * as user from '../core/user-funcs.js'
+import * as auth from '../authentication/AuthService.js'
 
 export default {
   name: 'profile',
@@ -117,10 +118,10 @@ export default {
   },
   computed: {
     username () {
-      return JSON.parse(localStorage.getItem('nickname'))
+      return auth.getUserProfile().nickname
     },
     picture () {
-      return JSON.parse(localStorage.getItem('picture'))
+      return auth.getUserProfile().picture
     },
     userBoards () {
       return this.boards

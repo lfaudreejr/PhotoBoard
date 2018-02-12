@@ -49,7 +49,7 @@
 
 <script>
 import * as user from '../core/user-funcs.js'
-import { checkIfOwnerOrAdmin } from '../authentication/AuthService.js'
+import { checkIfOwnerOrAdmin, getUserProfile } from '../authentication/AuthService.js'
 
 export default {
   name: 'comments',
@@ -64,7 +64,7 @@ export default {
   },
   computed: {
     userPicture () {
-      const profile = JSON.parse(localStorage.getItem('profile'))
+      const profile = getUserProfile()
       return profile.picture
     },
     currentPin () {
