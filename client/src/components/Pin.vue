@@ -214,7 +214,9 @@ export default {
   },
   computed: {
     currentUser () {
-      return user.currentUser()
+      const thisUser = user.currentUser()
+      if (thisUser) return thisUser
+      else return null
     }
   },
   created () {
