@@ -4,6 +4,8 @@ import * as api from '../api'
 import config from '../config'
 import router from '../router'
 
+let theUser
+
 const getAuth = (() => {
   let auth
   return () => {
@@ -35,19 +37,31 @@ function setSession (authResult) {
   return authNotifier.emit('authChange', { authenticated: true })
 }
 
-function getProfile (authResult) {
-  getAuth().client.userInfo(authResult.accessToken, (err, user) => {
-    if (err) console.log(err)
-    localStorage.setItem('id', JSON.stringify(user.sub))
-    localStorage.setItem('nickname', JSON.stringify(user.nickname))
-    localStorage.setItem('picture', JSON.stringify(user.picture))
-    localStorage.setItem('roles', JSON.stringify(user['http://myapp.com/roles']))
-    authNotifier.emit('profileChange', { currentUser: getId() })
-    return setTimeout(() => {
-      loginToApi()
-    }, 1000)
+export function getUserProfile () {
+  const accesstoken = localStorage.getItem('access_token')
+
+  if (theUser) return theUser
+  if (!accesstoken) {
+    return {
+      id: '',
+      nickname: '',
+      picture: '',
+      roles: ''
+    }
+  }
+  return getAuth().client.userInfo(accesstoken, (err, user) => {
+    if (err) return console.error(err)
+    theUser = {
+      id: user.sub,
+      nickname: user.nickname,
+      picture: user.picture,
+      roles: user['http://myapp.com/roles']
+    }
+    authNotifier.emit('profileChange', { currentUser: theUser.id })
+    return theUser
   })
 }
+
 function isAuthenticated () {
   // Check whether the current time is past the
   // access token's expiry time
@@ -61,7 +75,7 @@ export const login = () => getAuth().authorize()
 export const handleLogin = () => getAuth().parseHash(async (err, authResult) => {
   if (authResult && authResult.accessToken && authResult.idToken) {
     await setSession(authResult)
-    await getProfile(authResult)
+    loginToApi()
     return router.replace('/')
   } else if (err) {
     setTimeout(() => router.replace('/'), 1000)
@@ -72,24 +86,19 @@ export const logout = () => {
   localStorage.removeItem('access_token')
   localStorage.removeItem('id_token')
   localStorage.removeItem('expires_at')
-  localStorage.removeItem('nickname')
-  localStorage.removeItem('picture')
-  localStorage.removeItem('roles')
-  localStorage.removeItem('id')
   authNotifier.emit('authChange', { authenticated: false })
   authNotifier.emit('profileChange', { currentUser: null })
   router.replace('/')
 }
 
 export const getUserNickname = () => {
-  // const username = JSON.parse(localStorage.getItem('profile'))
-  const username = JSON.parse(localStorage.getItem('nickname'))
+  const username = getUserProfile().nickname
   if (username) return username
   else return null
 }
 
 export const isAdmin = () => {
-  const roles = JSON.parse(localStorage.getItem('roles'))
+  const roles = getUserProfile().roles
   if (roles) {
     const isAnAdmin = roles.find((e) => e === 'admin')
     if (isAnAdmin) return true
@@ -99,7 +108,7 @@ export const isAdmin = () => {
 }
 
 export const getId = () => {
-  return JSON.parse(localStorage.getItem('id'))
+  return getUserProfile().id
 }
 
 export const checkIfOwnerOrAdmin = (currentUser, owner) => {
