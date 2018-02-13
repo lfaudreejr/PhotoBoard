@@ -28,17 +28,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, '../public/images/favicon.ico')));
-app.use(helmet.contentSecurityPolicy({
-  directives: {
-    defaultSrc: ["'self'"],
-    styleSrc: ["'self'", 'fonts.googleapis.com'],
-    fontSrc: ["'self'", 'fonts.gstatic.com'],
-    scriptSrc: ["'self'", "'unsafe-eval'"],
-    imgSrc: ["'*'"],
-    reportUri: '/report-violation',
-  },
-  browserSniff: false
-}));
+
 app.use(helmet());
 app.use(compression());
 app.use(logger('dev'));
