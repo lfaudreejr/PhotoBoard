@@ -34,6 +34,7 @@ app.use(helmet.contentSecurityPolicy({
     styleSrc: ["'self'", 'fonts.googleapis.com'],
     fontSrc: ["'self'", 'fonts.gstatic.com'],
     scriptSrc: ["'self'", "'unsafe-eval'"],
+    imgSrc: ["'*'"],
     reportUri: '/report-violation',
   },
   browserSniff: false
