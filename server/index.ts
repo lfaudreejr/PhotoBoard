@@ -32,7 +32,7 @@ app.use(helmet.contentSecurityPolicy({
   directives: {
     defaultSrc: ["'none'"],
     styleSrc: ["'self'", 'fonts.googleapis.com'],
-    fontSrc: ["'self'", 'fonts.googleapis.com'],
+    fontSrc: ["'self'", 'fonts.gstatic.com'],
     scriptSrc: ["'self'"],
     reportUri: '/report-violation',
   },
