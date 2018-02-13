@@ -30,8 +30,13 @@ if (process.env.NODE_ENV === 'development') {
 app.use(favicon(path.join(__dirname, '../public/images/favicon.ico')));
 app.use(helmet.contentSecurityPolicy({
   directives: {
-    defaultSrc: ["'self'"]
-  }
+    defaultSrc: ["'none'"],
+    styleSrc: ["'self'"],
+    fontSrc: ["'self'", 'fonts.googleapis.com'],
+    scriptSrc: ["'self'"],
+    reportUri: '/report-violation',
+  },
+  browserSniff: false
 }));
 app.use(helmet());
 app.use(compression());
@@ -46,6 +51,15 @@ if (process.env.NODE_ENV === 'production') {
  * Router
  */
 app.use('/api', apiRouter);
+app.post('/report-violation', bodyParser.json({type: ['json', 'application/csp-report']}),(req, res, next) => {
+  if (req.body) {
+    console.log('CSP Violation: ', req.body)
+  } else {
+    console.log('CSP Violation: No data received!')
+  }
+
+  res.status(204).end()
+})
 
 if (process.env.NODE_ENV === 'production') {
   app.get('*', (req, res) => {
