@@ -30,7 +30,7 @@ if (process.env.NODE_ENV === 'development') {
 app.use(favicon(path.join(__dirname, '../public/images/favicon.ico')));
 app.use(helmet.contentSecurityPolicy({
   directives: {
-    defaultSrc: ["'none'"],
+    defaultSrc: ["'self'"],
     styleSrc: ["'self'", 'fonts.googleapis.com'],
     fontSrc: ["'self'", 'fonts.gstatic.com'],
     scriptSrc: ["'self'", "'unsafe-eval'"],
