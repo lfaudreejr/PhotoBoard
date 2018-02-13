@@ -31,7 +31,7 @@ app.use(favicon(path.join(__dirname, '../public/images/favicon.ico')));
 app.use(helmet.contentSecurityPolicy({
   directives: {
     defaultSrc: ["'none'"],
-    styleSrc: ["'self'"],
+    styleSrc: ["'self'", 'fonts.googleapis.com'],
     fontSrc: ["'self'", 'fonts.googleapis.com'],
     scriptSrc: ["'self'"],
     reportUri: '/report-violation',
