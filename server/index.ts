@@ -33,7 +33,7 @@ app.use(helmet.contentSecurityPolicy({
     defaultSrc: ["'none'"],
     styleSrc: ["'self'", 'fonts.googleapis.com'],
     fontSrc: ["'self'", 'fonts.gstatic.com'],
-    scriptSrc: ["'self'"],
+    scriptSrc: ["'self'", "'unsafe-eval'"],
     reportUri: '/report-violation',
   },
   browserSniff: false
