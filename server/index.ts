@@ -6,6 +6,10 @@ import * as cookieParser from 'cookie-parser'
 import * as bodyParser from 'body-parser'
 import * as compression from 'compression'
 import * as helmet from 'helmet'
+
+import debug = require('debug')
+debug('photoboard:app')
+debug('photoboard:error')
 /**
  * Api Route handlers
  */

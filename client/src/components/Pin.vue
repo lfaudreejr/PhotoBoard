@@ -13,7 +13,7 @@
             <h3>{{pin.description}}</h3>
           </md-card-content>
           <!-- show if current pin owner -->
-          <md-card-actions v-if="checkIfOwnerOrAdmin(currentUser,pin.saved_by)">
+          <md-card-actions v-if="checkIfOwnerOrAdmin(currentUser.id, pin.saved_by)">
             <md-button class="md-icon-button md-accent" @click="showConfirmDeletePinModal(true)">
               <md-icon>delete</md-icon>
             </md-button>
@@ -32,7 +32,7 @@
             </md-button>
           </md-card-actions>
           <!-- Show if not the current pin owner -->
-          <md-card-actions v-if="authenticated && currentUser !== pin.saved_by">
+          <md-card-actions v-if="authenticated && currentUser.id !== pin.saved_by">
             <md-button class="md-icon-button" @click="showSavePinModal(true)">
               <md-icon>bookmark</md-icon>
             </md-button>
@@ -40,7 +40,7 @@
         </md-card-area>
       </md-card>
       <!-- Comments Component -->
-      <comments :authenticated="authenticated" :pin="pin" :comments="comments"></comments>
+      <comments :authenticated="authenticated" :pin="pin" :comments="comments" ></comments>
       <!-- -->
     </div>
     <!-- show modal to edit pin -->
@@ -93,7 +93,7 @@
 
 <script>
 import * as user from '../core/user-funcs.js'
-import { checkIfOwnerOrAdmin } from '../authentication/AuthService.js'
+import * as auth from '../authentication/AuthService.js'
 import Comments from './Comments'
 
 export default {
@@ -116,7 +116,12 @@ export default {
       currentBoards: null,
       editPinDescription: null,
       comments: null,
-      checkIfOwnerOrAdmin
+      checkIfOwnerOrAdmin: auth.checkIfOwnerOrAdmin
+    }
+  },
+  computed: {
+    currentUser () {
+      return auth.getUserProfile()
     }
   },
   methods: {
@@ -145,21 +150,21 @@ export default {
         url: this.pin.url,
         description: this.pin.description,
         uploaded_by: this.pin.uploaded_by,
-        saved_by: user.currentUser()
+        saved_by: auth.getUserProfile().id
       }
       const board = {
         _id: boardId
       }
       user.addPinToUserBoard(pin, board)
       .then((data) => {
-        this.$router.replace(`/${user.getUserProfile()}/dashboard/${data.data.value.title}`)
+        this.$router.replace(`/${auth.getUserProfile().nickname}/dashboard/${data.data.value.title}`)
       })
       .catch((err) => console.error(err))
     },
     createABoardToAddPin (title) {
       user.createABoard({
         title: title,
-        owner: user.currentUser()
+        owner: auth.getUserProfile().id
       }).then((data) => {
         this.savePinToBoard(data.data._id)
       })
@@ -201,7 +206,7 @@ export default {
       .then((data) => {
         this.pin = data.data
         this.getPinComments()
-        if (user.currentUser()) {
+        if (auth.getUserProfile()) {
           user.getUserBoards()
           .then((data) => {
             this.currentBoards = data.data
@@ -210,13 +215,6 @@ export default {
         }
         this.loading = false
       })
-    }
-  },
-  computed: {
-    currentUser () {
-      const thisUser = user.currentUser()
-      if (thisUser) return thisUser
-      else return null
     }
   },
   created () {

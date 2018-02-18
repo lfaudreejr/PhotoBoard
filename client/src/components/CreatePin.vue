@@ -105,6 +105,7 @@
 import vue2Dropzone from 'vue2-dropzone'
 import { required, url } from 'vuelidate/lib/validators'
 import * as user from '../core/user-funcs.js'
+import * as auth from '../authentication/AuthService.js'
 
 export default {
   name: 'CreatePin',
@@ -113,6 +114,9 @@ export default {
   },
   props: {
     board: {
+      type: Object
+    },
+    currentUser: {
       type: Object
     }
   },
@@ -169,8 +173,8 @@ export default {
       const pin = {
         url: this.linkModal.url,
         description: this.linkModal.description,
-        uploaded_by: user.currentUser(),
-        saved_by: user.currentUser()
+        uploaded_by: auth.getUserProfile().id,
+        saved_by: auth.getUserProfile().id
       }
       const board = {
         _id: this.board._id

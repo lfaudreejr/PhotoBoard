@@ -13,20 +13,16 @@
 </template>
 
 <script>
-import {login, logout, getUserNickname} from '../authentication/AuthService.js'
+import * as auth from '../authentication/AuthService.js'
 
 export default {
   name: 'navbar',
   props: ['authenticated'],
-  data () {
-    return {
-    }
-  },
   methods: {
-    login,
-    logout,
+    login: auth.login,
+    logout: auth.logout,
     gotoProfile () {
-      this.$router.push({name: 'Profile', params: { id: getUserNickname() }})
+      this.$router.push({name: 'Profile', params: { id: auth.getUserProfile().id }})
     }
   }
 }

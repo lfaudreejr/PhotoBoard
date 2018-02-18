@@ -11,7 +11,7 @@
           <div class="md-list-item-text">
             <span>{{c.comment}}</span>
           </div>
-          <md-button v-if="checkIfOwnerOrAdmin(currentUser,c.commentor)"  class="md-icon-button md-accent" @click="showDeleteCommentConfirm(true)">
+          <md-button v-if="checkIfOwnerOrAdmin(currentUser.id, c.commentor)"  class="md-icon-button md-accent" @click="showDeleteCommentConfirm(true)">
             <md-icon>delete</md-icon>
           </md-button>
               <!-- Delete Confirm Modal -->
@@ -49,7 +49,7 @@
 
 <script>
 import * as user from '../core/user-funcs.js'
-import { checkIfOwnerOrAdmin, getUserProfile } from '../authentication/AuthService.js'
+import * as auth from '../authentication/AuthService.js'
 
 export default {
   name: 'comments',
@@ -59,13 +59,12 @@ export default {
       comment: null,
       saveCommentModalControl: false,
       showDeleteCommentModalControl: false,
-      checkIfOwnerOrAdmin
+      checkIfOwnerOrAdmin: auth.checkIfOwnerOrAdmin
     }
   },
   computed: {
     userPicture () {
-      const profile = getUserProfile()
-      return profile.picture
+      return auth.getUserProfile().id
     },
     currentPin () {
       return this.pin
@@ -74,7 +73,7 @@ export default {
       return this.comments
     },
     currentUser () {
-      return user.currentUser()
+      return auth.getUserProfile()
     }
   },
   methods: {
@@ -83,8 +82,8 @@ export default {
         this.pin._id,
         {
           comment: this.comment,
-          commentor: user.currentUser(),
-          commentorPicture: this.userPicture
+          commentor: auth.getUserProfile().id,
+          commentorPicture: auth.getUserProfile().picture
         }
       )
       .then((data) => user.dataEmitter.emit('commentChange', data))

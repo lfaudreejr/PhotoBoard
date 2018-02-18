@@ -8,7 +8,7 @@ import Board from '@/components/Board'
 import FourOhFour from '@/components/FourOhFour'
 import Pin from '@/components/Pin'
 
-import { getUserProfile } from '../core/user-funcs'
+import * as auth from '../authentication/AuthService'
 
 Vue.use(Router)
 
@@ -35,7 +35,8 @@ export default new Router({
       name: 'Dashboard',
       component: Dashboard,
       beforeEnter: (to, from, next) => {
-        if (getUserProfile() !== to.params.id) {
+        let profile = auth.getUserProfile()
+        if (profile.id !== to.params.id) {
           next('/')
         }
         next()

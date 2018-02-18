@@ -102,6 +102,7 @@ import * as auth from '../authentication/AuthService.js'
 
 export default {
   name: 'profile',
+  props: ['authenticated', 'isAdmin'],
   data () {
     return {
       loading: false,
@@ -156,7 +157,7 @@ export default {
       .catch((err) => console.error(err))
     },
     createBoard () {
-      user.createABoard({title: this.modal.boardName, owner: user.currentUser()})
+      user.createABoard({title: this.modal.boardName, owner: auth.getUserProfile().id})
       .then((data) => {
         this.$router.push(this.modal.boardName)
       }).catch((err) => {

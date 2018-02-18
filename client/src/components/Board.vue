@@ -55,6 +55,11 @@ import * as user from '../core/user-funcs.js'
 
 export default {
   name: 'board',
+  props: {
+    currentUser: {
+      type: Object
+    }
+  },
   components: {
     CreatePin
   },
