@@ -35,7 +35,6 @@ function saveUserToApi () {
     const profile = getUserProfile()
     return api.post('/api/user/profile', { _id: profile.id })
       .then((data) => {
-        console.log(data.data)
         resolve(data.data)
       })
       .catch((err) => {
@@ -44,9 +43,8 @@ function saveUserToApi () {
       })
   })
 }
-
+let theUser
 export const getUserProfile = (() => {
-  let theUser
   return () => {
     if (theUser) {
       return theUser
@@ -68,6 +66,7 @@ export const getUserProfile = (() => {
           picture: user.picture,
           roles: user['http://myapp.com/roles']
         }
+        authNotifier.emit('profileChange', { currentUser: theUser })
         return theUser
       })
     }
@@ -86,9 +85,10 @@ export const handleLogin = async () => getAuth().parseHash(async (err, authResul
     localStorage.setItem('id_token', authResult.idToken)
     localStorage.setItem('expires_at', expiresAt)
 
-    const userProfile = getUserProfile()
+    // const userProfile = getUserProfile()
+    getUserProfile()
 
-    authNotifier.emit('profileChange', { currentUser: userProfile })
+    // authNotifier.emit('profileChange', { currentUser: userProfile })
     authNotifier.emit('authChange', { authenticated: true })
 
     return router.replace('/')
@@ -124,8 +124,11 @@ export const checkIfOwnerOrAdmin = (currentUser, owner) => {
 export const authNotifier = new EventEmitter()
 export const authenticated = isAuthenticated()
 
-authNotifier.on('authChange', (data) => {
-  if (data.authenticated) {
+authNotifier.on('profileChange', (data) => {
+  if (data.currentUser) {
     saveUserToApi()
+  }
+  if (data.currentUser === null) {
+    theUser = undefined
   }
 })

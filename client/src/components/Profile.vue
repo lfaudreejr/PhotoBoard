@@ -29,7 +29,7 @@
           </md-card>
       </div>
 
-      <div v-if="userBoards" v-masonry-tile class="tile" v-for="board in userBoards" :key="board.title">
+      <div v-if="userBoards" v-masonry-tile class="tile" v-for="board in userBoards" :key="board._id">
         <md-card md-with-hover class="board">
           <md-ripple v-on:click.native="gotoBoard(board.title)">
             <md-card-header>
@@ -44,7 +44,7 @@
             </md-card-content>
           </md-ripple>
           <md-button @click="openBoardEditModal(true), setEditBoard(board)">edit</md-button>
-          <md-button class="md-accent" @click="openDeleteConfirmModal(true)">Delete</md-button>
+          <md-button class="md-accent" @click="openDeleteConfirmModal(true), setDeletingBoard(board)">Delete</md-button>
         </md-card>
         <!-- Confirm Delete Board MODAL -->
         <md-dialog-confirm
@@ -54,7 +54,7 @@
           md-confirm-text="Delete"
           md-cancel-text="Cancel"
           @md-cancel="openDeleteConfirmModal(false)"
-          @md-confirm="confirmDelete(board._id)"
+          @md-confirm="confirmDelete()"
         ></md-dialog-confirm>
       </div>
 
@@ -114,7 +114,8 @@ export default {
       },
       boards: null,
       newBoardTitle: null,
-      editingBoard: null
+      editingBoard: null,
+      deletingBoard: null
     }
   },
   computed: {
@@ -141,15 +142,20 @@ export default {
     setEditBoard (board) {
       this.editingBoard = board
     },
-    confirmDelete (boardId) {
+    setDeletingBoard (board) {
+      this.deletingBoard = board
+    },
+    confirmDelete () {
       this.loading = true
-      user.deleteABoard(boardId)
+
+      user.deleteABoard(this.deletingBoard._id)
       .then((data) => {
         this.getPins()
         .then((data) => {
           this.loading = false
           this.boards = data
           this.editingBoard = null
+          this.deletingBoard = null
         })
         .catch((err) => console.error(err))
         this.openBoardEditModal(false)
@@ -198,6 +204,9 @@ export default {
   },
   created () {
     this.fetchData()
+  },
+  updated () {
+    this.$redrawVueMasonry()
   },
   watch: {
     '$route': 'fetchData'

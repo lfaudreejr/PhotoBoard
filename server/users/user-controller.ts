@@ -12,14 +12,16 @@ export function createUser (req: Request, res: Response, next: NextFunction) {
   log('Finding user ' + util.inspect(req.body))
   findUser(_id)
     .then((data) => {
-      log('User data ' + util.inspect(data))
-      if (data._id) {
-        return returnJSONResponse({ message: "User exists" }, res)
-      } else {
+      if (!data) {
         return saveUser(_id)
-        .then((data: any) => returnJSONResponse(data.ops[0], res))
+        .then((user: any) => {
+          log('Saved user ' + util.inspect(user))
+          return returnJSONResponse(user.ops[0], res)
+        })
         .catch((err) => handleError(err, next))
       }
+      log('Found user ' + util.inspect(data))
+      return returnJSONResponse({ message: "User exists" }, res)
     })
     .catch((err) => {
       next(err)
