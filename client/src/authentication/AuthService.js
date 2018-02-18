@@ -46,7 +46,7 @@ function saveUserToApi () {
 let theUser
 export const getUserProfile = (() => {
   return () => {
-    if (theUser) {
+    if (theUser && theUser.id) {
       return theUser
     } else {
       const accessToken = localStorage.getItem('access_token')

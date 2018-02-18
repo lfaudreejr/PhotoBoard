@@ -42,11 +42,11 @@
 
           <md-divider></md-divider>
           <md-dialog-actions>
-            <md-button
+            <!-- <md-button
               @click="showDropModal(true), showLinkModal(false)"
             >
               Upload An Image
-            </md-button>
+            </md-button> -->
             <md-button
               class="md-primary"
               @click="showLinkModal(false)"
@@ -65,7 +65,7 @@
       </div>
     </md-dialog>
     <!--  MODAL for Creating a Pin via img file drop -->
-    <md-dialog
+    <!-- <md-dialog
       :md-active.sync="showDropModalProp"
       class="modal">
       <md-dialog-content>
@@ -97,7 +97,7 @@
           </md-button>
         </md-dialog-actions>
       </md-dialog-content>
-    </md-dialog>
+    </md-dialog> -->
   </div>
 </template>
 
