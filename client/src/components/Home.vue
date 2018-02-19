@@ -3,8 +3,8 @@
     <div v-if="loading">
       <md-progress-bar md-mode="query" class="md-accent"></md-progress-bar>
     </div>
-    <div v-masonry transition-duration='0.3s' item-selector='.home-tile' v-if="pins">
-      <div v-masonry-tile class="home-tile" v-for="pin in pins" :key="pin._id">
+    <div v-masonry transition-duration='0.3s' item-selector='.home-tile' v-if="pins" class="masonry-container">
+      <div v-masonry-tile class="home-tile" v-for="(pin, index) in pins" :key="index">
         <md-card>
           <!-- <md-card-media-cover md-text-scrim> -->
             <md-card-media>
@@ -13,7 +13,7 @@
 
             <md-card-area>
               <md-card-actions>
-                <md-button v-if="authenticated && currentUser !== pin.saved_by" class="md-icon-button" @click="updateClickedPin(pin), showSavePinDialog(true)">
+                <md-button v-if="authenticated && currentUser.id !== pin.saved_by" class="md-icon-button" @click="updateClickedPin(pin), showSavePinDialog(true)">
                   <md-icon>bookmark</md-icon>
                 </md-button>
 
@@ -64,10 +64,11 @@
 
 <script>
 import * as user from '../core/user-funcs.js'
+import * as auth from '../authentication/AuthService.js'
 
 export default {
   name: 'main',
-  props: ['authenticated', 'currentUser'],
+  props: ['authenticated'],
   data () {
     return {
       loading: false,
@@ -78,6 +79,11 @@ export default {
       pins: {},
       currentBoards: null,
       createBoardTitle: null
+    }
+  },
+  computed: {
+    currentUser () {
+      return auth.getUserProfile()
     }
   },
   methods: {
@@ -99,14 +105,14 @@ export default {
         url: clicked.url,
         description: clicked.description,
         uploaded_by: clicked.uploaded_by,
-        saved_by: user.currentUser()
+        saved_by: auth.getUserProfile().id
       }
       const board = {
         _id: boardId
       }
       user.addPinToUserBoard(pin, board)
       .then((data) => {
-        this.$router.replace(`/${user.getUserProfile()}/dashboard/${data.data.value.title}`)
+        this.$router.replace(`/${auth.getUserProfile().nickname}/dashboard/${data.data.value.title}`)
       })
       .catch((err) => console.error(err))
     },
@@ -117,7 +123,7 @@ export default {
       this.loading = true
       user.createABoard({
         title: boardName,
-        owner: user.currentUser()
+        owner: auth.getUserProfile().id
       }).then((data) => {
         this.loading = false
         this.savePinToBoard(data.data._id)
@@ -132,7 +138,7 @@ export default {
       .then((data) => {
         this.pins = data.data
         setTimeout(() => {
-          if (user.currentUser()) {
+          if (auth.getUserProfile().id) {
             user.getUserBoards().then((data) => {
               this.currentBoards = data.data
             }).catch((err) => console.error(err))
@@ -158,5 +164,9 @@ export default {
 <style>
 .md-card {
   margin: 5px 0;
+}
+.masonry-container {
+  width: 85%;
+  margin: 0 auto;
 }
 </style>

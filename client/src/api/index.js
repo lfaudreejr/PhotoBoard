@@ -1,8 +1,13 @@
 import axios from 'axios'
-import { getId } from '../authentication/AuthService'
+import * as auth from '../authentication/AuthService'
 
 export const getToken = () => {
   return localStorage.getItem('access_token')
+}
+
+function getId () {
+  const profile = auth.getUserProfile()
+  return profile.id
 }
 
 /**

@@ -1,5 +1,5 @@
 <template>
-  <router-view :authenticated="authenticated" :isAdmin="isAdmin"></router-view>
+  <router-view :authenticated="authenticated" :isAdmin="isAdmin" ></router-view>
 </template>
 
 <script>

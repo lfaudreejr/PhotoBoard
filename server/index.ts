@@ -6,6 +6,10 @@ import * as cookieParser from 'cookie-parser'
 import * as bodyParser from 'body-parser'
 import * as compression from 'compression'
 import * as helmet from 'helmet'
+
+import debug = require('debug')
+const log   = debug('photoboard:app')
+const error = debug('photoboard:error')
 /**
  * Api Route handlers
  */
@@ -28,16 +32,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, '../public/images/favicon.ico')));
-app.use(helmet.contentSecurityPolicy({
-  directives: {
-    defaultSrc: ["'self'"],
-    styleSrc: ["'self'", 'fonts.googleapis.com'],
-    fontSrc: ["'self'", 'fonts.gstatic.com'],
-    scriptSrc: ["'self'", "'unsafe-eval'"],
-    reportUri: '/report-violation',
-  },
-  browserSniff: false
-}));
+
 app.use(helmet());
 app.use(compression());
 app.use(logger('dev'));
@@ -82,7 +77,7 @@ app.use(function(err: Error, req: express.Request, res: express.Response, next: 
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
+  error(err.stack)
   // render the error page
   res.status(Number(err.message) || 500).json(err);
 });
