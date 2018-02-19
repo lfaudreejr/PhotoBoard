@@ -115,9 +115,6 @@ export default {
   props: {
     board: {
       type: Object
-    },
-    currentUser: {
-      type: Object
     }
   },
   data () {
@@ -179,16 +176,20 @@ export default {
       const board = {
         _id: this.board._id
       }
+      this.clearModal()
       user.addPinToUserBoard(pin, board)
       .then((data) => {
-        this.linkModal.url = null
-        this.linkModal.description = null
         user.dataEmitter.emit('pinSaved')
       })
       .catch((err) => console.error(err))
     },
     createPinByUpload () {
       this.showDropModal(false)
+    },
+    clearModal () {
+      this.linkModal.url = ''
+      this.linkModal.description = ''
+      this.linkModal.boardName = ''
     }
   }
 }

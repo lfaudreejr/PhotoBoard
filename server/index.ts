@@ -8,8 +8,8 @@ import * as compression from 'compression'
 import * as helmet from 'helmet'
 
 import debug = require('debug')
-debug('photoboard:app')
-debug('photoboard:error')
+const log   = debug('photoboard:app')
+const error = debug('photoboard:error')
 /**
  * Api Route handlers
  */
@@ -77,7 +77,7 @@ app.use(function(err: Error, req: express.Request, res: express.Response, next: 
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
+  error(err.stack)
   // render the error page
   res.status(Number(err.message) || 500).json(err);
 });

@@ -1,9 +1,9 @@
 import { Response, NextFunction } from "express-serve-static-core";
-
-export function returnJSONResponse (data, res: Response) {
-  return res.json(data)
-}
+import * as util from 'util'
+import debug = require('debug')
+const error = debug('photoboard:error')
 
 export function handleError(error, next: NextFunction) {
+  error('Error ' + error)
   return next(error)
 }

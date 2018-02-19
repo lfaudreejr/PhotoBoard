@@ -206,7 +206,8 @@ export default {
       .then((data) => {
         this.pin = data.data
         this.getPinComments()
-        if (auth.getUserProfile()) {
+        const currentUser = auth.getUserProfile()
+        if (currentUser && currentUser.id) {
           user.getUserBoards()
           .then((data) => {
             this.currentBoards = data.data

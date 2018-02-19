@@ -3,8 +3,8 @@
     <div v-if="loading">
       <md-progress-bar md-mode="query" class="md-accent"></md-progress-bar>
     </div>
-    <div v-masonry transition-duration='0.3s' item-selector='.home-tile' v-if="pins">
-      <div v-masonry-tile class="home-tile" v-for="pin in pins" :key="pin._id">
+    <div v-masonry transition-duration='0.3s' item-selector='.home-tile' v-if="pins" class="masonry-container">
+      <div v-masonry-tile class="home-tile" v-for="(pin, index) in pins" :key="index">
         <md-card>
           <!-- <md-card-media-cover md-text-scrim> -->
             <md-card-media>
@@ -123,7 +123,7 @@ export default {
       this.loading = true
       user.createABoard({
         title: boardName,
-        owner: auth.getUserProfile()().id
+        owner: auth.getUserProfile().id
       }).then((data) => {
         this.loading = false
         this.savePinToBoard(data.data._id)
@@ -164,5 +164,9 @@ export default {
 <style>
 .md-card {
   margin: 5px 0;
+}
+.masonry-container {
+  width: 85%;
+  margin: 0 auto;
 }
 </style>

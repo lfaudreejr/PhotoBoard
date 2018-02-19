@@ -12,7 +12,7 @@
       </div>
     </div>
 
-    <div v-masonry transition-duration='0.3s' item-selector='.tile'>
+    <div v-masonry transition-duration='0.3s' item-selector='.tile' class="masonry-container">
 
       <div v-masonry-tile class="tile">
           <md-card md-with-hover v-on:click.native="showCreateBoardDialog(true)" class="board-card">
@@ -36,8 +36,12 @@
               <span class="md-subhead">{{board.title}}</span>
             </md-card-header>
             <md-card-content>
-              <div v-masonry item-selector='.inner-tile'>
-                <div v-masonry-tile class="inner-tile" v-for="pin in board.pins" :key="pin._id">
+              <div v-masonry
+                transition-duration='0.3s'
+                item-selector='.inner-tile'  class="masonry-container">
+                <div v-masonry-tile
+                  class="inner-tile"
+                  v-for="pin in board.pins" :key="pin._id">
                   <img :src="pin.url"/>
                 </div>
               </div>
@@ -190,16 +194,26 @@ export default {
       return user.getUserBoards()
     },
     getPins () {
-      return user.getUserPins()
+      const pins = user.getUserPins()
+      return pins.then((data) => {
+        let newData = data.map(board => {
+          if (board.pins.length - 1 > 5) {
+            board.pins = board.pins.slice(0, 5)
+          }
+          return board
+        })
+        return newData
+      }).catch(err => console.error(err))
     },
     fetchData () {
       this.loading = true
-      this.getPins().then((data) => {
+      this.getPins().then(data => {
         this.boards = data
         this.loading = false
+      }).catch(err => {
+        this.loading = false
+        console.error(err)
       })
-      .catch((err) => console.error(err))
-      this.loading = false
     }
   },
   created () {
@@ -224,5 +238,9 @@ export default {
 }
 .dialog {
   padding: 15px;
+}
+.masonry-container {
+  width: 90%;
+  margin: 0 auto;
 }
 </style>
