@@ -42,11 +42,11 @@
 
           <md-divider></md-divider>
           <md-dialog-actions>
-            <md-button
+            <!-- <md-button
               @click="showDropModal(true), showLinkModal(false)"
             >
               Upload An Image
-            </md-button>
+            </md-button> -->
             <md-button
               class="md-primary"
               @click="showLinkModal(false)"
@@ -65,7 +65,7 @@
       </div>
     </md-dialog>
     <!--  MODAL for Creating a Pin via img file drop -->
-    <md-dialog
+    <!-- <md-dialog
       :md-active.sync="showDropModalProp"
       class="modal">
       <md-dialog-content>
@@ -97,7 +97,7 @@
           </md-button>
         </md-dialog-actions>
       </md-dialog-content>
-    </md-dialog>
+    </md-dialog> -->
   </div>
 </template>
 
@@ -105,6 +105,7 @@
 import vue2Dropzone from 'vue2-dropzone'
 import { required, url } from 'vuelidate/lib/validators'
 import * as user from '../core/user-funcs.js'
+import * as auth from '../authentication/AuthService.js'
 
 export default {
   name: 'CreatePin',
@@ -169,22 +170,26 @@ export default {
       const pin = {
         url: this.linkModal.url,
         description: this.linkModal.description,
-        uploaded_by: user.currentUser(),
-        saved_by: user.currentUser()
+        uploaded_by: auth.getUserProfile().id,
+        saved_by: auth.getUserProfile().id
       }
       const board = {
         _id: this.board._id
       }
+      this.clearModal()
       user.addPinToUserBoard(pin, board)
       .then((data) => {
-        this.linkModal.url = null
-        this.linkModal.description = null
         user.dataEmitter.emit('pinSaved')
       })
       .catch((err) => console.error(err))
     },
     createPinByUpload () {
       this.showDropModal(false)
+    },
+    clearModal () {
+      this.linkModal.url = ''
+      this.linkModal.description = ''
+      this.linkModal.boardName = ''
     }
   }
 }

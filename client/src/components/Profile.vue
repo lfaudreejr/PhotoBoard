@@ -12,7 +12,7 @@
       </div>
     </div>
 
-    <div v-masonry transition-duration='0.3s' item-selector='.tile'>
+    <div v-masonry transition-duration='0.3s' item-selector='.tile' class="masonry-container">
 
       <div v-masonry-tile class="tile">
           <md-card md-with-hover v-on:click.native="showCreateBoardDialog(true)" class="board-card">
@@ -29,22 +29,26 @@
           </md-card>
       </div>
 
-      <div v-if="userBoards" v-masonry-tile class="tile" v-for="board in userBoards" :key="board.title">
+      <div v-if="userBoards" v-masonry-tile class="tile" v-for="board in userBoards" :key="board._id">
         <md-card md-with-hover class="board">
           <md-ripple v-on:click.native="gotoBoard(board.title)">
             <md-card-header>
               <span class="md-subhead">{{board.title}}</span>
             </md-card-header>
             <md-card-content>
-              <div v-masonry item-selector='.inner-tile'>
-                <div v-masonry-tile class="inner-tile" v-for="pin in board.pins" :key="pin._id">
+              <div v-masonry
+                transition-duration='0.3s'
+                item-selector='.inner-tile'  class="masonry-container">
+                <div v-masonry-tile
+                  class="inner-tile"
+                  v-for="pin in board.pins" :key="pin._id">
                   <img :src="pin.url"/>
                 </div>
               </div>
             </md-card-content>
           </md-ripple>
           <md-button @click="openBoardEditModal(true), setEditBoard(board)">edit</md-button>
-          <md-button class="md-accent" @click="openDeleteConfirmModal(true)">Delete</md-button>
+          <md-button class="md-accent" @click="openDeleteConfirmModal(true), setDeletingBoard(board)">Delete</md-button>
         </md-card>
         <!-- Confirm Delete Board MODAL -->
         <md-dialog-confirm
@@ -54,7 +58,7 @@
           md-confirm-text="Delete"
           md-cancel-text="Cancel"
           @md-cancel="openDeleteConfirmModal(false)"
-          @md-confirm="confirmDelete(board._id)"
+          @md-confirm="confirmDelete()"
         ></md-dialog-confirm>
       </div>
 
@@ -102,6 +106,7 @@ import * as auth from '../authentication/AuthService.js'
 
 export default {
   name: 'profile',
+  props: ['authenticated', 'isAdmin'],
   data () {
     return {
       loading: false,
@@ -113,7 +118,8 @@ export default {
       },
       boards: null,
       newBoardTitle: null,
-      editingBoard: null
+      editingBoard: null,
+      deletingBoard: null
     }
   },
   computed: {
@@ -140,15 +146,20 @@ export default {
     setEditBoard (board) {
       this.editingBoard = board
     },
-    confirmDelete (boardId) {
+    setDeletingBoard (board) {
+      this.deletingBoard = board
+    },
+    confirmDelete () {
       this.loading = true
-      user.deleteABoard(boardId)
+
+      user.deleteABoard(this.deletingBoard._id)
       .then((data) => {
         this.getPins()
         .then((data) => {
           this.loading = false
           this.boards = data
           this.editingBoard = null
+          this.deletingBoard = null
         })
         .catch((err) => console.error(err))
         this.openBoardEditModal(false)
@@ -156,7 +167,7 @@ export default {
       .catch((err) => console.error(err))
     },
     createBoard () {
-      user.createABoard({title: this.modal.boardName, owner: user.currentUser()})
+      user.createABoard({title: this.modal.boardName, owner: auth.getUserProfile().id})
       .then((data) => {
         this.$router.push(this.modal.boardName)
       }).catch((err) => {
@@ -183,20 +194,33 @@ export default {
       return user.getUserBoards()
     },
     getPins () {
-      return user.getUserPins()
+      const pins = user.getUserPins()
+      return pins.then((data) => {
+        let newData = data.map(board => {
+          if (board.pins.length - 1 > 5) {
+            board.pins = board.pins.slice(0, 5)
+          }
+          return board
+        })
+        return newData
+      }).catch(err => console.error(err))
     },
     fetchData () {
       this.loading = true
-      this.getPins().then((data) => {
+      this.getPins().then(data => {
         this.boards = data
         this.loading = false
+      }).catch(err => {
+        this.loading = false
+        console.error(err)
       })
-      .catch((err) => console.error(err))
-      this.loading = false
     }
   },
   created () {
     this.fetchData()
+  },
+  updated () {
+    this.$redrawVueMasonry()
   },
   watch: {
     '$route': 'fetchData'
@@ -214,5 +238,9 @@ export default {
 }
 .dialog {
   padding: 15px;
+}
+.masonry-container {
+  width: 90%;
+  margin: 0 auto;
 }
 </style>

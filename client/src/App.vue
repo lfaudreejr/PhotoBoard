@@ -4,13 +4,13 @@
     <div v-if="loading">
       <md-progress-bar md-mode="indeterminate" class="md-accent"></md-progress-bar>
     </div>
-    <router-view :authenticated='authenticated' :currentUser="currentUser" :isAdmin="isAdmin"></router-view>
+    <router-view :authenticated='authenticated' :isAdmin="isAdmin"></router-view>
   </div>
 </template>
 
 <script>
 import Navbar from './components/Navbar'
-import {authenticated, authNotifier, currentUser, isAdmin} from './authentication/AuthService.js'
+import {authenticated, authNotifier, isAdmin} from './authentication/AuthService.js'
 
 export default {
   name: 'app',
@@ -26,7 +26,6 @@ export default {
     })
     return {
       authenticated,
-      currentUser,
       isAdmin,
       loading: false
     }
